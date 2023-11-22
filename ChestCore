@@ -147,7 +147,7 @@ if BF == true then
         if Distance < 1000 then
             Speed = 550
         elseif Distance >= 1000 then
-            Speed = 900
+            Speed = 700
         end
     
         local tween_s = game:service"TweenService"
