@@ -1,0 +1,168 @@
+local placeId = game.PlaceId
+if placeId == 2753915549 or placeId == 4442272183 or placeId == 7449423635 then
+    BF = true
+end
+if _G.ChestLoaded then
+    print("Already loaded")
+    return
+end
+_G.ChestLoaded = 1
+
+if BF == true then
+    repeat wait() until game:IsLoaded()
+    function Notification(text)
+        local StarterGui = game:GetService("StarterGui")
+        StarterGui:SetCore("SendNotification", {
+            Title = "ChestFarm by deadcxde";
+            Text = text
+        })
+    end
+    local function HopServer()
+        local PlaceID = game.PlaceId
+        local AllIDs = {}
+        local foundAnything = ""
+        local actualHour = os.date("!*t").hour
+        local Deleted = false
+        local File = pcall(function()
+        AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServersChestFarm.json"))
+        end)
+        if not File then
+        table.insert(AllIDs, actualHour)
+        writefile("NotSameServersChestFarm.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+        end
+        function TPReturner()
+            local Site;
+            if foundAnything == "" then
+                Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+            else
+                Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+            end
+            local ID = ""
+            if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+                foundAnything = Site.nextPageCursor
+            end
+            local num = 0;
+            for i,v in pairs(Site.data) do
+                local Possible = true
+                ID = tostring(v.id)
+                if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                    for _,Existing in pairs(AllIDs) do
+                        if num ~= 0 then
+                            if ID == tostring(Existing) then
+                                Possible = false
+                            end
+                        else
+                            if tonumber(actualHour) ~= tonumber(Existing) then
+                                local delFile = pcall(function()
+                                    -- delfile("NotSameServers.json")
+                                    AllIDs = {}
+                                    table.insert(AllIDs, actualHour)
+                                end)
+                            end
+                        end
+                        num = num + 1
+                    end
+                    if Possible == true then
+                        table.insert(AllIDs, ID)
+                        wait()
+                        pcall(function()
+                            -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                            wait()
+                            game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                        end)
+                        wait(4)
+                    end
+                end
+            end
+        end
+    
+        function Teleport()
+            while wait() do
+                pcall(function()
+                    TPReturner()
+                    if foundAnything ~= "" then
+                        TPReturner()
+                    end
+                end)
+            end
+        end
+    
+        Teleport()
+        wait(1)
+    end
+    local function toTarget(...)
+        local RealtargetPos = {...}
+        local targetPos = RealtargetPos[1]
+        local RealTarget
+        if type(targetPos) == "vector" then
+            RealTarget = CFrame.new(targetPos)
+        elseif type(targetPos) == "userdata" then
+            RealTarget = targetPos
+        elseif type(targetPos) == "number" then
+            RealTarget = CFrame.new(unpack(RealtargetPos))
+        end
+    
+        if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then if tween then tween:Cancel() end repeat wait() until game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health > 0; wait(0.2) end
+    
+        local tweenfunc = {}
+        local Distance = (RealTarget.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude
+        if Distance < 1000 then
+            Speed = 335
+        elseif Distance >= 1000 then
+            Speed = 350
+        end
+    
+        local tween_s = game:service"TweenService"
+        local info = TweenInfo.new((RealTarget.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/Speed, Enum.EasingStyle.Linear)
+        local tweenw, err = pcall(function()
+            tween = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], info, {CFrame = RealTarget})
+            tween:Play()
+        end)
+    
+        function tweenfunc:Stop()
+            tween:Cancel()
+        end 
+    
+        function tweenfunc:Wait()
+            tween.Completed:Wait()
+        end 
+    
+        return tweenfunc
+    end
+    Notification("Chest Farm auto loaded")
+    local function findChest()
+        for i,v in pairs(game.Workspace:GetChildren()) do
+            if string.find(v.Name, "Chest") then
+                return v.CFrame
+            end
+        end
+        return 0
+    end
+    spawn(function()
+        wait(0.5)
+        if _G.ChestFarmEnabled then
+            cframe = findChest()
+            if cframe then
+                tw = toTarget(cframe)
+            else
+                pcall(function() tw:Stop() end)
+            end
+        end
+    end)
+    spawn(function()
+        wait(1800)
+        if _G.ChestFarmEnabled then
+            if _G.BypassAntiCheat then
+                HopServer()
+            end
+        end
+    end)
+    spawn(function()
+        wait(2)
+        if _G.ChestFarmEnabled then
+            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+        end
+    end)
+else
+    print("Game not supported")
+end
