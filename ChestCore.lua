@@ -3,7 +3,7 @@ if placeId == 2753915549 or placeId == 4442272183 or placeId == 7449423635 then
     BF = true
 end
 if _G.ChestLoaded then
-    print("Already loaded!!")
+    print("Already loaded!")
     return
 end
 _G.ChestLoaded = 1
