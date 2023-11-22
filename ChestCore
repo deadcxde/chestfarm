@@ -145,7 +145,7 @@ if BF == true then
         end
 
         if Distance < 1000 then
-            Speed = 550
+            Speed = 500
         elseif Distance >= 1000 then
             Speed = 700
         end
