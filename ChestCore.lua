@@ -13,7 +13,7 @@ if BF == true then
     function Notification(text)
         local StarterGui = game:GetService("StarterGui")
         StarterGui:SetCore("SendNotification", {
-            Title = "ChestFarm by deadcxde";
+            Title = "ChestFarm | deadcxde";
             Text = text
         })
     end
