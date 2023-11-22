@@ -143,11 +143,13 @@ if BF == true then
         return 0
     end
     spawn(function()
-        wait(0.5)
-        if _G.ChestFarmEnabled then
-            cframe = findChest()
-            if cframe then
-                tw = toTarget(cframe)
+        while wait() do
+            wait(0.5)
+            if _G.ChestFarmEnabled then
+                cframe = findChest()
+                if cframe then
+                    tw = toTarget(cframe)
+                end
             end
         end
     end)
@@ -160,9 +162,11 @@ if BF == true then
         end
     end)
     spawn(function()
-        wait(2)
-        if _G.ChestFarmEnabled then
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+        while wait() do
+            wait(2)
+            if _G.ChestFarmEnabled then
+                game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+            end
         end
     end)
     spawn(function()
