@@ -219,6 +219,27 @@ if BF == true then
             end
         end
     end)
+
+    if _G.ChestFarmEnabled then
+        local args = {
+            [1] = "SetTeam",
+            [2] = "Pirates"
+        }
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        local args = {
+            [1] = "ZQuestProgress"
+        }
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        local args = {
+            [1] = "BartiloQuestProgress"
+        }
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        local args = {
+            [1] = "Buso"
+        }
+
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+    end
 else
     print("Game not supported")
 end
