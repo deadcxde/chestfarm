@@ -25,6 +25,31 @@ if BF == true then
         }
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
     end
+
+    local OSTime = os.time()
+    local Time = os.date('!*t', OSTime)
+    local function send_webhook()
+        local plr = game.Players.LocalPlayer
+        local Embed = {
+            ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
+            ["description"] = "**Beli: ** `" .. plr.Data.Beli.Value .. "`",
+            ["type"] = "rich",
+            ["color"] = tonumber(0xffff00),
+            ["footer"] = {
+                ["text"] = "chest farm bot",
+            },
+            ["timestamp"] = string.format('%d-%d-%dT%02d:%02d:%02dZ', Time.year, Time.month, Time.day, Time.hour, Time.min, Time.sec),
+        };
+        http.request {
+            Url = _G.WebhookURL;
+            Method = 'POST';
+            Headers = {
+                ['Content-Type'] = 'application/json';
+            };
+            Body = game:GetService'HttpService':JSONEncode({embeds = {Embed};});
+        };
+    end
+
     local function HopServer()
         local PlaceID = game.PlaceId
         local AllIDs = {}
@@ -216,6 +241,14 @@ if BF == true then
                 if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1") then
                     game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1"):Destroy();
                 end
+            end
+        end
+    end)
+    spawn(function()
+        while wait() do
+            wait(_G.WebhookTimer)
+            if _G.WebhookURL then 
+                send_webhook()
             end
         end
     end)
