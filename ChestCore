@@ -106,6 +106,7 @@ if BF == true then
     
         local tweenfunc = {}
         local Distance = (RealTarget.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude
+        if Distance > 3000
         if Distance < 1000 then
             Speed = 335
         elseif Distance >= 1000 then
@@ -144,8 +145,6 @@ if BF == true then
             cframe = findChest()
             if cframe then
                 tw = toTarget(cframe)
-            else
-                pcall(function() tw:Stop() end)
             end
         end
     end)
