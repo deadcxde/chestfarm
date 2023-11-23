@@ -172,8 +172,13 @@ if BF == true then
     
         return tweenfunc
     end
-    local function TP(CFrame)
-        game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame / 2
+    local function teleportToObject(cframe)
+        pcall(function() 
+            game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position = obj.Position
+            wait(0.2)
+            game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position = obj.Position
+        end)
+        
     end
     Notification("Chest Farm auto loaded")
     local function findNearestChest()
@@ -195,7 +200,15 @@ if BF == true then
             if _G.ChestFarmEnabled then
                 cframe = findNearestChest()
                 if cframe then
-                    tw = toTarget(cframe)
+                    if _G.BypassTP == 1 then
+                        teleportToObject(cframe)
+                    else 
+                        tw = toTarget(cframe)
+                    end
+                else
+                    if _G.HopWhenNoChest then
+                        HopServer()
+                    end
                 end
             end
         end
