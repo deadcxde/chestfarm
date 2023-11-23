@@ -172,27 +172,27 @@ if BF == true then
     
         return tweenfunc
     end
-    local function teleportToObject(cframe)
+    local function teleportToObject(object)
         pcall(function() 
-            game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position = obj.Position
+            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = object.Position
             wait(0.2)
-            game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position = obj.Position
+            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = object.Position
         end)
         
     end
     Notification("Chest Farm auto loaded")
     local function findNearestChest()
         local latestDist = 9999999
-        local cframe = 0
+        local obj = 0
         for i,v in pairs(game.Workspace:GetChildren()) do
             if string.find(v.Name, "Chest") then
                 if (v.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < latestDist then
                     latestDist = (v.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude
-                    cframe = v.CFrame
+                    obj = v
                 end
             end
         end
-        return cframe
+        return obj
     end
     spawn(function()
         while wait() do
