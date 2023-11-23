@@ -200,10 +200,10 @@ if BF == true then
             if _G.ChestFarmEnabled then
                 cframe = findNearestChest()
                 if cframe then
-                    if _G.BypassTP == 1 then
+                    if _G.BypassTP then
                         teleportToObject(cframe)
                     else 
-                        tw = toTarget(cframe)
+                        tw = toTarget(cframe.CFrame)
                     end
                 else
                     if _G.HopWhenNoChest then
