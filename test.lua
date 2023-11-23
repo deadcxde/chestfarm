@@ -3,7 +3,7 @@ if placeId == 2753915549 or placeId == 4442272183 or placeId == 7449423635 then
     BF = true
 end
 if _G.ChestLoaded then
-    print("Already loaded")
+    print("Already loaded!")
     return
 end
 _G.ChestLoaded = 1
@@ -13,7 +13,7 @@ if BF == true then
     function Notification(text)
         local StarterGui = game:GetService("StarterGui")
         StarterGui:SetCore("SendNotification", {
-            Title = "ChestFarm by deadcxde";
+            Title = "ChestFarm | deadcxde";
             Text = text
         })
     end
@@ -28,11 +28,16 @@ if BF == true then
 
     local OSTime = os.time()
     local Time = os.date('!*t', OSTime)
+    local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
     local function send_webhook()
         local plr = game.Players.LocalPlayer
+        function spacenumber(n) 
+           local s = string.reverse(n)
+           return s:gsub("(%d%d%d)", "%1 "):reverse() 
+        end
         local Embed = {
             ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-            ["description"] = "**Beli: ** `" .. plr.Data.Beli.Value .. "`",
+            ["description"] = "**Beli when start: ** `" .. spacenumber(beliOnStart) .. "`\n" .. "**Beli now: ** `" .. spacenumber(plr.Data.Beli.Value) .. "`",
             ["type"] = "rich",
             ["color"] = tonumber(0xffff00),
             ["footer"] = {
@@ -145,9 +150,9 @@ if BF == true then
         end
 
         if Distance < 1000 then
-            Speed = 335
+            Speed = 300
         elseif Distance >= 1000 then
-            Speed = 350
+            Speed = 380
         end
     
         local tween_s = game:service"TweenService"
@@ -168,9 +173,8 @@ if BF == true then
         return tweenfunc
     end
     local function TP(CFrame)
-        game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame
+        game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame / 2
     end
-
     Notification("Chest Farm auto loaded")
     local function findNearestChest()
         local latestDist = 9999999
@@ -191,8 +195,7 @@ if BF == true then
             if _G.ChestFarmEnabled then
                 cframe = findNearestChest()
                 if cframe then
-                    -- tw = toTarget(cframe)
-                    TP(cframe)
+                    tw = TP(cframe)
                 end
             end
         end
@@ -270,24 +273,14 @@ if BF == true then
     end)
 
     if _G.ChestFarmEnabled then
-        local args = {
-            [1] = "SetTeam",
-            [2] = "Pirates"
-        }
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-        local args = {
-            [1] = "ZQuestProgress"
-        }
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-        local args = {
-            [1] = "BartiloQuestProgress"
-        }
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-        local args = {
-            [1] = "Buso"
-        }
-
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Visible == true then
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Position = UDim2.new(-4, 0, -5, 0)
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.BackgroundTransparency = 1
+            wait(.5)
+            game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
+            game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
+        end
     end
 else
     print("Game not supported")
