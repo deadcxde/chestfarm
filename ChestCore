@@ -172,6 +172,9 @@ if BF == true then
     
         return tweenfunc
     end
+    local function TP(CFrame)
+        game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame / 2
+    end
     Notification("Chest Farm auto loaded")
     local function findNearestChest()
         local latestDist = 9999999
@@ -269,25 +272,24 @@ if BF == true then
         end
     end)
 
-    if _G.ChestFarmEnabled then
-        local args = {
-            [1] = "SetTeam",
-            [2] = "Pirates"
-        }
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-        local args = {
-            [1] = "ZQuestProgress"
-        }
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-        local args = {
-            [1] = "BartiloQuestProgress"
-        }
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-        local args = {
-            [1] = "Buso"
-        }
+    spawn(function()
+        while wait() do
+            wait(0.5)
+            game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end)
+        end
+    end)
 
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+    if _G.ChestFarmEnabled then
+        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Visible == true then
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Position = UDim2.new(-4, 0, -5, 0)
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.BackgroundTransparency = 1
+            wait(.5)
+            game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
+            game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
+        end
     end
 else
     print("Game not supported")
