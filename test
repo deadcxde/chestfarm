@@ -277,7 +277,7 @@ if BF == true then
             wait(0.5)
             game:GetService("GuiService").ErrorMessageChanged:Connect(function()
                 game:GetService("TeleportService"):Teleport(game.PlaceId)
-            end); 
+            end);
         end
     end)
 
