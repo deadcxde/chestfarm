@@ -281,6 +281,9 @@ if BF == true then
             game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
             game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
         end
+        game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+            game:GetService("TeleportService"):Teleport(game.PlaceId)
+        end); 
     end
 else
     print("Game not supported")
