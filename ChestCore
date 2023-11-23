@@ -28,6 +28,7 @@ if BF == true then
 
     local OSTime = os.time()
     local Time = os.date('!*t', OSTime)
+    local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
     local function send_webhook()
         local plr = game.Players.LocalPlayer
         function spacenumber(n) 
@@ -36,7 +37,7 @@ if BF == true then
         end
         local Embed = {
             ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-            ["description"] = "**Beli: ** `" .. spacenumber(plr.Data.Beli.Value) .. "`",
+            ["description"] = "**Beli when start: ** `" .. spacenumber(beliOnStart) .. "`\n" .. "**Beli now: ** `" .. spacenumber(plr.Data.Beli.Value) .. "`",
             ["type"] = "rich",
             ["color"] = tonumber(0xffff00),
             ["footer"] = {
