@@ -195,7 +195,7 @@ if BF == true then
             if _G.ChestFarmEnabled then
                 cframe = findNearestChest()
                 if cframe then
-                    tw = TP(cframe)
+                    tw = toTarget(cframe)
                 end
             end
         end
@@ -272,6 +272,15 @@ if BF == true then
         end
     end)
 
+    spawn(function()
+        while wait() do
+            wait(0.5)
+            game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end); 
+        end
+    end)
+
     if _G.ChestFarmEnabled then
         if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Visible == true then
             game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
@@ -281,9 +290,7 @@ if BF == true then
             game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
             game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
         end
-        game:GetService("GuiService").ErrorMessageChanged:Connect(function()
-            game:GetService("TeleportService"):Teleport(game.PlaceId)
-        end); 
+        
     end
 else
     print("Game not supported")
