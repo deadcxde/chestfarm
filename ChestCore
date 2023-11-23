@@ -30,9 +30,13 @@ if BF == true then
     local Time = os.date('!*t', OSTime)
     local function send_webhook()
         local plr = game.Players.LocalPlayer
+        function spacenumber(n) 
+           local s = string.reverse(n)
+           return s:gsub("(%d%d%d)", "%1 "):reverse() 
+        end
         local Embed = {
             ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-            ["description"] = "**Beli: ** `" .. plr.Data.Beli.Value .. "`",
+            ["description"] = "**Beli: ** `" .. spacenumber(plr.Data.Beli.Value) .. "`",
             ["type"] = "rich",
             ["color"] = tonumber(0xffff00),
             ["footer"] = {
