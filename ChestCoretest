@@ -128,6 +128,29 @@ if BF == true then
         Teleport()
         wait(1)
     end
+
+    function Bypass(Point)
+        toposition(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+        wait(0.5)
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+        game.Players.LocalPlayer.Character.Head:Destroy()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(0,50,0)
+        wait(.2)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
+        wait(.1)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(0,50,0)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+        wait(.1)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
+        wait(0.5)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(900,900,900)
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+        if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
+        end
+    end
+
     local function toTarget(...)
         local RealtargetPos = {...}
         local targetPos = RealtargetPos[1]
@@ -200,7 +223,11 @@ if BF == true then
             if _G.ChestFarmEnabled then
                 cframe = findNearestChest()
                 if cframe then
-                    tw = toTarget(cframe.CFrame)
+                    if _G.BypassTP then
+                        tw = toTarget(cframe.CFrame)
+                    else
+                        Bypass(cframe.CFrame)
+                    end
                 else
                     if _G.HopWhenNoChest then
                         HopServer()
@@ -281,24 +308,6 @@ if BF == true then
         end
     end)
 
-    repeat wait()
-        if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
-            if _G.Team == "Pirate" then
-                for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
-                    v.Function()
-                end
-            elseif _G.Team == "Marine" then
-                for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.TextButton.Activated)) do                                                                                                
-                    v.Function()
-                end
-            else
-                for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
-                    v.Function()
-                end
-            end
-        end
-    until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded()
-
     spawn(function()
         while wait() do
             wait(0.5)
@@ -307,7 +316,17 @@ if BF == true then
             end)
         end
     end)
-    
+
+    if _G.ChestFarmEnabled then
+        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Visible == true then
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Position = UDim2.new(-4, 0, -5, 0)
+            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.BackgroundTransparency = 1
+            wait(.5)
+            game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
+            game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
+        end
+    end
 else
     print("Game not supported")
 end
