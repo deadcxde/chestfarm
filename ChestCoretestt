@@ -225,6 +225,7 @@ if BF == true then
                     if _G.BypassTP then
                         toTarget(cframe.CFrame)
                     else
+                        print("use bypass")
                         Bypass(cframe.CFrame)
                     end
                 else
