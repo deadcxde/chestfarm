@@ -172,14 +172,14 @@ if BF == true then
     
         return tweenfunc
     end
-    local function teleportToObject(object)
-        pcall(function() 
-            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = object.Position
-            wait(0.2)
-            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = object.Position
-        end)
+    -- local function teleportToObject(object)
+    --     pcall(function() 
+    --         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = object.Position
+    --         wait(0.2)
+    --         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position = object.Position
+    --     end)
         
-    end
+    -- end
     Notification("Chest Farm auto loaded")
     local function findNearestChest()
         local latestDist = 9999999
@@ -200,11 +200,7 @@ if BF == true then
             if _G.ChestFarmEnabled then
                 cframe = findNearestChest()
                 if cframe then
-                    if _G.BypassTP == 1 then
-                        teleportToObject(cframe)
-                    else 
-                        tw = toTarget(cframe.CFrame)
-                    end
+                    tw = toTarget(cframe.CFrame)
                 else
                     if _G.HopWhenNoChest then
                         HopServer()
@@ -285,6 +281,24 @@ if BF == true then
         end
     end)
 
+    repeat wait()
+        if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
+            if _G.Team == "Pirate" then
+                for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
+                    v.Function()
+                end
+            elseif _G.Team == "Marine" then
+                for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.TextButton.Activated)) do                                                                                                
+                    v.Function()
+                end
+            else
+                for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
+                    v.Function()
+                end
+            end
+        end
+    until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded()
+
     spawn(function()
         while wait() do
             wait(0.5)
@@ -293,17 +307,7 @@ if BF == true then
             end)
         end
     end)
-
-    if _G.ChestFarmEnabled then
-        if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Visible == true then
-            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
-            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Position = UDim2.new(-4, 0, -5, 0)
-            game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.BackgroundTransparency = 1
-            wait(.5)
-            game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
-            game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
-        end
-    end
+    
 else
     print("Game not supported")
 end
