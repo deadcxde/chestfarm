@@ -223,6 +223,7 @@ pcall(function()
                     cframe = findNearestChest()
                     if cframe then
                         Bypass(cframe.CFrame)
+                        wait(4)
                     else
                         if _G.HopWhenNoChest then
                             HopServer()
