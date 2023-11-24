@@ -130,7 +130,6 @@ if BF == true then
     end
 
     function Bypass(Point)
-        toposition(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
         wait(0.5)
         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
         game.Players.LocalPlayer.Character.Head:Destroy()
@@ -224,7 +223,7 @@ if BF == true then
                 cframe = findNearestChest()
                 if cframe then
                     if _G.BypassTP then
-                        tw = toTarget(cframe.CFrame)
+                        toTarget(cframe.CFrame)
                     else
                         Bypass(cframe.CFrame)
                     end
