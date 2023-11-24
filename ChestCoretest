@@ -141,6 +141,8 @@ pcall(function()
             game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
             wait(.1)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
+            wait(.1)
+            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
             wait(0.5)
             game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(900,900,900)
@@ -223,7 +225,7 @@ pcall(function()
                     cframe = findNearestChest()
                     if cframe then
                         Bypass(cframe.CFrame)
-                        wait(4)
+                        wait(1)
                     else
                         if _G.HopWhenNoChest then
                             HopServer()
