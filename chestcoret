@@ -137,18 +137,11 @@ pcall(function()
             wait(.2)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
             wait(.1)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(0,50,0)
             game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
             wait(.1)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
             wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+            game:service('VirtualInputManager'):SendKeyEvent(true, "Q", false, game)
             wait(0.5)
             game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(900,900,900)
@@ -232,11 +225,13 @@ pcall(function()
                         if _G.BypassTP == 0 then
                             toTarget(cframe.CFrame)
                             game:service('VirtualInputManager'):SendKeyEvent(true, "Q", false, game)
+                            wait(.1)
                         else
                             Bypass(cframe.CFrame)
-                            game:service('VirtualInputManager'):SendKeyEvent(true, "Q", false, game)
+                            
+                            wait(1.5)
                         end
-                        wait(1.5)
+                        
                     else
                         if _G.HopWhenNoChest then
                             HopServer()
