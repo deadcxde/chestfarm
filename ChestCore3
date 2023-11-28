@@ -132,7 +132,6 @@ pcall(function()
     
         function Bypass(Point)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
-            wait(.2)
             game:service('VirtualInputManager'):SendKeyEvent(true, "A", false, game)
             game:service('VirtualInputManager'):SendKeyEvent(false, "A", false, game)
             game:service('VirtualInputManager'):SendKeyEvent(true, "W", false, game)
