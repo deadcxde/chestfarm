@@ -136,7 +136,6 @@ pcall(function()
             game:service('VirtualInputManager'):SendKeyEvent(false, "A", false, game)
             game:service('VirtualInputManager'):SendKeyEvent(true, "W", false, game)
             game:service('VirtualInputManager'):SendKeyEvent(false, "W", false, game)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
         end
     
         local function toTarget(...)
