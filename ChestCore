@@ -30,7 +30,7 @@ pcall(function()
         local OSTime = os.time()
         local Time = os.date('!*t', OSTime)
         local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
-        local function send_webhook()
+        local function send_webhook(sended_from)
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
             local workTime = os.date('!*t', nOSTime - OSTime)
@@ -42,7 +42,7 @@ pcall(function()
             local beliInc = spacenumber(plr.Data.Beli.Value - beliOnStart)
             local Embed = {
                 ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`",
+                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`\nfrom function: " .. sended_from,
                 ["type"] = "rich",
                 ["color"] = tonumber(0xffff00),
                 ["footer"] = {
@@ -225,7 +225,7 @@ pcall(function()
                         else
                             if _G.HopWhenNoChest then
                                 if _G.WebhookURL then 
-                                    if not _G.WebSended then send_webhook() _G.WebSended = true end
+                                    if not _G.WebSended then send_webhook("hop when no chest 228 line") _G.WebSended = true end
                                 end
                                 loopHopServer()
                                 return
@@ -248,7 +248,7 @@ pcall(function()
                         else
                             if _G.HopWhenNoChest then
                                 if _G.WebhookURL then 
-                                    send_webhook()
+                                    if not _G.WebSended then send_webhook("hop when no chest 251 line") _G.WebSended = true end
                                 end
                                 HopServer()
                                 return
@@ -318,7 +318,7 @@ pcall(function()
             while wait() do
                 wait(_G.WebhookTimer)
                 if _G.WebhookURL then 
-                    send_webhook()
+                    send_webhook("timer webhook")
                 end
             end
         end)
@@ -339,7 +339,7 @@ pcall(function()
                 wait(5)
                 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
                     if _G.WebhookURL then 
-                        if not _G.WebSended then send_webhook() _G.WebSended = true end
+                        if not _G.WebSended then send_webhook("game crashed 342 line") _G.WebSended = true end
                     end
                     loopHopServer()
                     return
