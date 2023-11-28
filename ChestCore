@@ -267,6 +267,7 @@ pcall(function()
         spawn(function()
             while wait() do 
                 if _G.ChestFarmEnabled then
+                    if _G.BypassTP then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
                     if syn then
                         setfflag("HumanoidParallelRemoveNoPhysics", "False")
                         setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
