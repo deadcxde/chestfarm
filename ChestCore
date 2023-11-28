@@ -4,7 +4,7 @@ pcall(function()
         BF = true
     end
     if _G.ChestLoaded then
-        print("Already loaded!!")
+        print("Already loaded!")
         return
     end
     _G.ChestLoaded = 1
@@ -225,7 +225,7 @@ pcall(function()
                         else
                             if _G.HopWhenNoChest then
                                 if _G.WebhookURL then 
-                                    if not _G.WebSended then send_webhook("hop when no chest 228 line") _G.WebSended = true end
+                                    if not _G.WebSended then _G.WebSended = true end
                                 end
                                 loopHopServer()
                                 return
@@ -248,7 +248,7 @@ pcall(function()
                         else
                             if _G.HopWhenNoChest then
                                 if _G.WebhookURL then 
-                                    if not _G.WebSended then send_webhook("hop when no chest 251 line") _G.WebSended = true end
+                                    if not _G.WebSended then _G.WebSended = true end
                                 end
                                 HopServer()
                                 return
@@ -335,11 +335,17 @@ pcall(function()
         end)
     
         spawn(function()
+            repeat wait() until _G.WebSended == true
+            send_webhook("Hopping Server | Disconnected")
+            return
+        end)
+
+        spawn(function()
             while wait() do
                 wait(5)
                 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
                     if _G.WebhookURL then 
-                        if not _G.WebSended then send_webhook("game crashed 342 line") _G.WebSended = true end
+                        if not _G.WebSended then _G.WebSended = true end
                     end
                     loopHopServer()
                     return
