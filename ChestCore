@@ -42,7 +42,7 @@ pcall(function()
             local beliInc = spacenumber(plr.Data.Beli.Value - beliOnStart)
             local Embed = {
                 ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`\n\n**" .. sended_from .. "**",
+                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`\nfrom function: " .. sended_from,
                 ["type"] = "rich",
                 ["color"] = tonumber(0xffff00),
                 ["footer"] = {
@@ -214,7 +214,10 @@ pcall(function()
             end
             return obj
         end
-
+        
+        _G.CounterBeforeHop = 0
+        _G.MaxCounter = 60
+        _G.WaitTimeWhenCount = 1
         if _G.BypassTP then
             spawn(function()
                 while wait() do
@@ -224,11 +227,16 @@ pcall(function()
                             Bypass(cframe.CFrame * CFrame.new(0, -2, 0))
                         else
                             if _G.HopWhenNoChest then
-                                if _G.WebhookURL then 
-                                    if not _G.WebSended then _G.WebSended = true end
+                                if _G.CounterBeforeHop < _G.MaxCounter then
+                                    wait(_G.WaitTimeWhenCount)
+                                    _G.CounterBeforeHop = _G.CounterBeforeHop + 1
+                                else
+                                    if _G.WebhookURL then 
+                                        if not _G.WebSended then _G.WebSended = true end
+                                    end
+                                    loopHopServer()
+                                    return
                                 end
-                                loopHopServer()
-                                return
                             end
                         end
                     end
