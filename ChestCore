@@ -222,6 +222,7 @@ pcall(function()
                                     send_webhook()
                                 end
                                 HopServer()
+                                return
                             end
                         end
                     end
@@ -326,7 +327,7 @@ pcall(function()
     
         spawn(function()
             while wait() do
-                wait(0.5)
+                wait(5)
                 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
                     if _G.WebhookURL then 
                         send_webhook()
