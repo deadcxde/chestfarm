@@ -233,6 +233,9 @@ pcall(function()
                             wait(.1)
                         else
                             if _G.HopWhenNoChest then
+                                if _G.WebhookURL then 
+                                    send_webhook()
+                                end
                                 HopServer()
                             end
                         end
@@ -317,6 +320,9 @@ pcall(function()
             while wait() do
                 wait(0.5)
                 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+                    if _G.WebhookURL then 
+                        send_webhook()
+                    end
                     game:GetService("TeleportService"):Teleport(game.PlaceId)
                 end)
             end
