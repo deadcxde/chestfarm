@@ -137,7 +137,8 @@ pcall(function()
         local function loopHopServer()
             while wait() do wait(2) HopServer() end
         end
-
+        
+        _G.WebSended = false
     
         function Bypass(Point)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
@@ -224,7 +225,7 @@ pcall(function()
                         else
                             if _G.HopWhenNoChest then
                                 if _G.WebhookURL then 
-                                    send_webhook()
+                                    if not _G.WebSended then send_webhook() _G.WebSended = true end
                                 end
                                 loopHopServer()
                                 return
@@ -281,6 +282,9 @@ pcall(function()
             while wait() do 
                 if _G.ChestFarmEnabled then
                     if _G.BypassTP then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
+                    if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
+                        game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+                    end
                     -- if syn then
                     --     setfflag("HumanoidParallelRemoveNoPhysics", "False")
                     --     setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
@@ -335,7 +339,7 @@ pcall(function()
                 wait(5)
                 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
                     if _G.WebhookURL then 
-                        send_webhook()
+                        if not _G.WebSended then send_webhook() _G.WebSended = true end
                     end
                     loopHopServer()
                     return
