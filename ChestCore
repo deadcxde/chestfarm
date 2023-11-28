@@ -210,12 +210,12 @@ pcall(function()
         if _G.BypassTP then
             spawn(function()
                 while wait() do
-                    wait(2)
+                    wait(1)
                     if _G.ChestFarmEnabled then
                         cframe = findNearestChest()
                         if cframe then
-                            Bypass(cframe.CFrame)
-                            wait(1.5)
+                            Bypass(cframe.CFrame * CFrame.new(0, -4, 0))
+                            wait(0.2)
                         else
                             if _G.HopWhenNoChest then
                                 HopServer()
