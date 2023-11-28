@@ -31,7 +31,6 @@ pcall(function()
         local Time = os.date('!*t', OSTime)
         local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
         local function send_webhook()
-            local beliInc = spacenumber(plr.Data.Beli.Value - beliOnStart)
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
             local workTime = os.date('!*t', nOSTime - OSTime)
@@ -40,6 +39,7 @@ pcall(function()
                local s = string.reverse(n)
                return s:gsub("(%d%d%d)", "%1 "):reverse() 
             end
+            local beliInc = spacenumber(plr.Data.Beli.Value - beliOnStart)
             local Embed = {
                 ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
                 ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`",
