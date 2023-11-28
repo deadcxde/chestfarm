@@ -42,7 +42,7 @@ pcall(function()
             local beliInc = spacenumber(plr.Data.Beli.Value - beliOnStart)
             local Embed = {
                 ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`\nfrom function: " .. sended_from,
+                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`\n**" .. sended_from .. "**",
                 ["type"] = "rich",
                 ["color"] = tonumber(0xffff00),
                 ["footer"] = {
