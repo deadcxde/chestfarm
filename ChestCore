@@ -132,7 +132,7 @@ pcall(function()
     
         function Bypass(Point)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
-            wait(.5)
+            wait(.2)
             game:service('VirtualInputManager'):SendKeyEvent(true, "A", false, game)
             game:service('VirtualInputManager'):SendKeyEvent(false, "A", false, game)
             game:service('VirtualInputManager'):SendKeyEvent(true, "W", false, game)
@@ -210,7 +210,7 @@ pcall(function()
         if _G.BypassTP then
             spawn(function()
                 while wait() do
-                    wait(1)
+                    wait(0.5)
                     if _G.ChestFarmEnabled then
                         cframe = findNearestChest()
                         if cframe then
