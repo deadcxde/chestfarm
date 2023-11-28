@@ -237,6 +237,7 @@ pcall(function()
                                     send_webhook()
                                 end
                                 HopServer()
+                                return
                             end
                         end
                     end
@@ -324,6 +325,7 @@ pcall(function()
                         send_webhook()
                     end
                     game:GetService("TeleportService"):Teleport(game.PlaceId)
+                    return
                 end)
             end
         end)
