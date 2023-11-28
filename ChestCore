@@ -194,7 +194,7 @@ pcall(function()
         Notification("Chest Farm auto loaded")
         local function findNearestChest()
             local latestDist = 9999999
-            local obj = 0
+            local obj = false
             for i,v in pairs(game.Workspace:GetChildren()) do
                 if string.find(v.Name, "Chest") then
                     if (v.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < latestDist then
@@ -211,7 +211,7 @@ pcall(function()
                 while wait() do
                     if _G.ChestFarmEnabled then
                         cframe = findNearestChest()
-                        if cframe then
+                        if cframe ~= false then
                             Bypass(cframe.CFrame * CFrame.new(0, -2, 0))
                             wait(0.1)
                         else
