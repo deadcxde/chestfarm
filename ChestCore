@@ -133,6 +133,11 @@ pcall(function()
             Teleport()
             wait(1)
         end
+
+        local function loopHopServer()
+            while wait() do wait(2) HopServer() end
+        end
+
     
         function Bypass(Point)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
@@ -221,7 +226,7 @@ pcall(function()
                                 if _G.WebhookURL then 
                                     send_webhook()
                                 end
-                                HopServer()
+                                loopHopServer()
                                 return
                             end
                         end
@@ -332,7 +337,7 @@ pcall(function()
                     if _G.WebhookURL then 
                         send_webhook()
                     end
-                    game:GetService("TeleportService"):Teleport(game.PlaceId)
+                    loopHopServer()
                     return
                 end)
             end
