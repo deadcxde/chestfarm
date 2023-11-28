@@ -4,7 +4,7 @@ pcall(function()
         BF = true
     end
     if _G.ChestLoaded then
-        print("Already loaded!")
+        print("Already loaded!!")
         return
     end
     _G.ChestLoaded = 1
