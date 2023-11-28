@@ -208,7 +208,7 @@ pcall(function()
                 for i2, v2 in pairs(v:GetChildren()) do
                     if v2.Name == 'Detail' then
                         for i3, chest in pairs(v2:GetChildren()) do
-                            if string.find(chest.Name, "Chest") and chest.Name != 'RengokuChest' then
+                            if string.find(chest.Name, "Chest") and chest.Name ~= 'RengokuChest' then
                                 if (chest.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < latestDist then
                                     latestDist = (v.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude
                                     obj = chest
