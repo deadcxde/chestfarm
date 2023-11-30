@@ -230,11 +230,15 @@ pcall(function()
         end
         
         _G.CounterBeforeHop = 0
-        _G.MaxCounter = 60
+        _G.MaxCounter = 50
         _G.WaitTimeWhenCount = 1
         if _G.BypassTP then
             spawn(function()
                 while wait() do
+                    if _G.StopEnabled then
+                        if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
+                    end
+    
                     if _G.ChestFarmEnabled then
                         cframe = findNearestChest()
                         if cframe ~= false then
@@ -259,6 +263,9 @@ pcall(function()
         else
             spawn(function()
                 while wait() do
+                    if _G.StopEnabled then
+                        if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
+                    end
                     wait(0.5)
                     if _G.ChestFarmEnabled then
                         cframe = findNearestChest()
