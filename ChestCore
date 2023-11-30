@@ -343,14 +343,6 @@ pcall(function()
                 end
             end
         end)
-        spawn(function()
-            while wait() do
-                wait(_G.WebhookTimer)
-                if _G.WebhookURL then 
-                    send_webhook("timer webhook")
-                end
-            end
-        end)
     
         spawn(function()
             while wait() do
