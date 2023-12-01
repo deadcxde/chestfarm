@@ -4,6 +4,8 @@ _G.WebhookURL = 'https://discord.com/api/webhooks/1174720347526922292/8RAWz_Wm6j
 _G.WebhookTimer = 60 -- Каждые X секунд
 _G.BypassTP = true
 _G.HopWhenNoChest = true
-_G.StopWhenBeli = 5000000 -- Остановить фарм когда больше чем X бели | 0 - Без остановки
+_G.StopWhenBeli = 2000000 -- Остановить фарм когда больше чем X бели
+_G.StopEnabled = true
+_G.DelayTP = 0.95
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/deadcxde/chestfarm/main/ChestCore"))()
