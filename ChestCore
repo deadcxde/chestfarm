@@ -235,6 +235,7 @@ pcall(function()
         if _G.BypassTP then
             spawn(function()
                 while wait() do
+                    wait(_G.DelayTP)
                     if _G.StopEnabled then
                         if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
                     end
