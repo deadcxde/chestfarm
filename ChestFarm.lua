@@ -4,7 +4,7 @@ _G.WebhookURL = 'https://discord.com/api/webhooks/1174720347526922292/8RAWz_Wm6j
 _G.WebhookTimer = 99 -- Каждые X секунд
 _G.BypassTP = true
 _G.HopWhenNoChest = true
-_G.StopWhenBeli = 2500000 -- Остановить фарм когда больше чем X бели
+_G.StopWhenBeli = 1500000 -- Остановить фарм когда больше чем X бели
 _G.StopEnabled = true
 _G.DelayTP = 0.95
 
