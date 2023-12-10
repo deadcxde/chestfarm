@@ -141,8 +141,9 @@ pcall(function()
         _G.WebSended = false
     
         function Bypass(Chest)
+            Chest.CanCollide = false
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, -1, 0)
-            Chest.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 1, 0)
+            Chest.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
         end
     
         local function toTarget(...)
