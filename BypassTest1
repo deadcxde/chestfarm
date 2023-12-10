@@ -142,7 +142,7 @@ pcall(function()
     
         function Bypass(Chest)
             Chest.CanCollide = false
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, -1, 0)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, 1, 0)
             Chest.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
         end
     
