@@ -230,7 +230,7 @@ pcall(function()
         end
         
         _G.CounterBeforeHop = 0
-        _G.MaxCounter = 50
+        _G.MaxCounter = 5
         _G.WaitTimeWhenCount = 1
         if _G.BypassTP then
             spawn(function()
