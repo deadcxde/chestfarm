@@ -141,8 +141,8 @@ pcall(function()
         _G.WebSended = false
     
         function Bypass(Chest)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, -2, 0)
-            Chest.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, -1, 0)
+            Chest.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 1, 0)
         end
     
         local function toTarget(...)
@@ -308,7 +308,7 @@ pcall(function()
         spawn(function()
             while wait() do 
                 if _G.ChestFarmEnabled then
-                    if _G.BypassTP then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
+                    if _G.BypassTP and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
                     if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
                         game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
                         game.Players.LocalPlayer.Character.HumanoidRootPart.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position * Vector3.new(0, 20, 0)
