@@ -233,30 +233,33 @@ pcall(function()
         if _G.BypassTP then
             spawn(function()
                 while wait() do
-                    wait(_G.DelayTP)
-                    if _G.StopEnabled then
-                        if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
-                    end
-    
-                    if _G.ChestFarmEnabled then
-                        cframe = findNearestChest()
-                        if cframe ~= false then
-                            Bypass(cframe)
-                        else
-                            if _G.HopWhenNoChest then
-                                if _G.CounterBeforeHop < _G.MaxCounter then
-                                    wait(_G.WaitTimeWhenCount)
-                                    _G.CounterBeforeHop = _G.CounterBeforeHop + 1
-                                else
-                                    if _G.WebhookURL then 
-                                        if not _G.WebSended then _G.WebSended = true end
+                    status, err = pcall(function()
+                        wait(_G.DelayTP)
+                        if _G.StopEnabled then
+                            if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
+                        end
+        
+                        if _G.ChestFarmEnabled then
+                            cframe = findNearestChest()
+                            if cframe ~= false then
+                                Bypass(cframe)
+                            else
+                                if _G.HopWhenNoChest then
+                                    if _G.CounterBeforeHop < _G.MaxCounter then
+                                        wait(_G.WaitTimeWhenCount)
+                                        _G.CounterBeforeHop = _G.CounterBeforeHop + 1
+                                    else
+                                        if _G.WebhookURL then 
+                                            if not _G.WebSended then _G.WebSended = true end
+                                        end
+                                        loopHopServer()
+                                        return
                                     end
-                                    loopHopServer()
-                                    return
                                 end
                             end
                         end
-                    end
+                    end)
+                    if err then print(err) end
                 end
             end)
         else
