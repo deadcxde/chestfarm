@@ -1,0 +1,10 @@
+_G.ChestFarmEnabled = 1
+_G.BypassAntiCheat = 1
+_G.WebhookURL = 'https://discord.com/api/webhooks/1184602987138662462/tsGAuNmVAk1l8hTsY2fm4mBtgKn48ap975whNypf0PPw2rB1ev7k8b4ChFpNQ3cZwd07'
+_G.WebhookTimer = 99 -- Каждые X секунд
+_G.BypassTP = true
+_G.HopWhenNoChest = true
+_G.StopWhenBeli = 1500000
+_G.StopEnabled = true
+_G.DelayTP = 0.02
+loadstring(game:HttpGet("https://raw.githubusercontent.com/deadcxde/chestfarm/main/BypassTest5"))()
