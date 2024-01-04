@@ -8,7 +8,10 @@ pcall(function()
         return
     end
     _G.ChestLoaded = 1
-    
+    if _G.StopWhenChalice == nil then
+        _G.Stop = false
+        _G.StopWhenChalice = false
+    end
     if BF == true then
         repeat wait() until game:IsLoaded()
         function Notification(text)
@@ -26,7 +29,25 @@ pcall(function()
             }
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
         end
-    
+        function tableempty(tb)
+            for _, _ in pairs(tb) do
+                return false
+            end
+            return true
+        end
+        
+        if _G.StopWhenChalice then
+            spawn(function()
+                while wait() do
+                    for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
+                        if string.find(v.Name, "halice") then
+                            _G.Stop = true
+                        end
+                    end
+                end
+            end)
+        end
+
         local OSTime = os.time()
         local Time = os.date('!*t', OSTime)
         local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
@@ -139,13 +160,48 @@ pcall(function()
         end
         
         _G.WebSended = false
-    
-        function Bypass(Point)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
-            game:service('VirtualInputManager'):SendKeyEvent(true, "A", false, game)
-            game:service('VirtualInputManager'):SendKeyEvent(false, "A", false, game)
-            game:service('VirtualInputManager'):SendKeyEvent(true, "W", false, game)
-            game:service('VirtualInputManager'):SendKeyEvent(false, "W", false, game)
+        
+        function findChestByCframe(cframe)
+            local obj = false
+            for i,v in pairs(game.Workspace.Map:GetChildren()) do
+                for i2, v2 in pairs(v:GetChildren()) do
+                    if v2.Name == 'Detail' then
+                        for i3, chest in pairs(v2:GetChildren()) do
+                            if string.find(chest.Name, "Chest") and chest.Name ~= 'RengokuChest' then
+                                if chest.CFrame == cframe then return v end
+                            end
+                        end
+                    end
+                end
+            end
+            for i,v in pairs(game.Workspace:GetChildren()) do
+                if string.find(v.Name, "Chest") then
+                    if v.CFrame == cframe then return v end
+                end
+            end
+            return obj
+        end
+
+        function Bypass(Chest)
+            Chest.CanCollide = false
+            if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
+            end
+            if game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored == true then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+            end
+            status, err = pcall(function() Chest.Script.RunContext = "Client" end)
+            cframe = Chest.CFrame
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, 5, 0)
+            wait(.1)
+            wait_max = 1
+            waiting = 0
+            repeat wait(0.01) 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cframe * CFrame.new(0, 2, 0)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+                waiting = waiting + 0.01
+            until findChestByCframe(cframe) == false or waiting >= wait_max
         end
     
         local function toTarget(...)
@@ -228,6 +284,27 @@ pcall(function()
             end
             return obj
         end
+
+        local function findAllChest()
+            obj = {}
+            for i,v in pairs(game.Workspace.Map:GetChildren()) do
+                for i2, v2 in pairs(v:GetChildren()) do
+                    if v2.Name == 'Detail' then
+                        for i3, chest in pairs(v2:GetChildren()) do
+                            if string.find(chest.Name, "Chest") and chest.Name ~= 'RengokuChest' then
+                                table.insert(obj, chest)
+                            end
+                        end
+                    end
+                end
+            end
+            for i,v in pairs(game.Workspace:GetChildren()) do
+                if string.find(v.Name, "Chest") then
+                    table.insert(obj, v)
+                end
+            end
+            return obj
+        end
         
         _G.CounterBeforeHop = 0
         _G.MaxCounter = 5
@@ -235,30 +312,38 @@ pcall(function()
         if _G.BypassTP then
             spawn(function()
                 while wait() do
-                    wait(_G.DelayTP)
-                    if _G.StopEnabled then
-                        if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
-                    end
-    
-                    if _G.ChestFarmEnabled then
-                        cframe = findNearestChest()
-                        if cframe ~= false then
-                            Bypass(cframe.CFrame * CFrame.new(0, -2, 0))
-                        else
-                            if _G.HopWhenNoChest then
-                                if _G.CounterBeforeHop < _G.MaxCounter then
-                                    wait(_G.WaitTimeWhenCount)
-                                    _G.CounterBeforeHop = _G.CounterBeforeHop + 1
-                                else
-                                    if _G.WebhookURL then 
-                                        if not _G.WebSended then _G.WebSended = true end
+                    if _G.Stop then return end
+                    status, err = pcall(function()
+                        wait(_G.DelayTP)
+                        if _G.StopEnabled then
+                            if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
+                        end
+        
+                        if _G.ChestFarmEnabled then
+                            chests = findAllChest()
+                            print(chests)
+                            if tableempty(chests) then
+                                if _G.HopWhenNoChest then
+                                    if _G.CounterBeforeHop < _G.MaxCounter then
+                                        wait(_G.WaitTimeWhenCount)
+                                        _G.CounterBeforeHop = _G.CounterBeforeHop + 1
+                                    else
+                                        if _G.WebhookURL then 
+                                            if not _G.WebSended then _G.WebSended = true end
+                                        end
+                                        loopHopServer()
+                                        return
                                     end
-                                    loopHopServer()
-                                    return
+                                end
+                            else
+                                for i,v in pairs(chests) do
+                                    if _G.Stop then return end
+                                    Bypass(v)
                                 end
                             end
                         end
-                    end
+                    end)
+                    if err then print(err) end
                 end
             end)
         else
@@ -311,7 +396,7 @@ pcall(function()
         spawn(function()
             while wait() do 
                 if _G.ChestFarmEnabled then
-                    if _G.BypassTP then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
+                    if _G.BypassTP and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
                     if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
                         game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
                         game.Players.LocalPlayer.Character.HumanoidRootPart.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position * Vector3.new(0, 20, 0)
@@ -379,23 +464,25 @@ pcall(function()
         end)
     
         if _G.ChestFarmEnabled then
-            repeat wait()
-                if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
-                    if _G.Team == "Pirate" then
-                        for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
-                            v.Function()
-                        end
-                    elseif _G.Team == "Marine" then
-                        for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.TextButton.Activated)) do                                                                                                
-                            v.Function()
-                        end
-                    else
-                        for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
-                            v.Function()
+            status, err = pcall(function()
+                repeat wait()
+                    if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
+                        if _G.Team == "Pirate" then
+                            for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
+                                v.Function()
+                            end
+                        elseif _G.Team == "Marine" then
+                            for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.TextButton.Activated)) do                                                                                                
+                                v.Function()
+                            end
+                        else
+                            for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
+                                v.Function()
+                            end
                         end
                     end
-                end
-            until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded() 
+                until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded() 
+            end)
         end
     else
         print("Game not supported")
