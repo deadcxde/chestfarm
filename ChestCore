@@ -353,10 +353,12 @@ pcall(function()
             end)
             task.spawn(function()
                 while true do
+                    if _G.Stop == true then return end
                     local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                     if not game.Players.LocalPlayer.Character or game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then
             
                     else
+                        if _G.Stop == true then return end
                         local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
                         if hasCrewTag then hasCrewTag:Destroy() end
                         local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
