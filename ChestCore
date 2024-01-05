@@ -196,9 +196,11 @@ pcall(function()
             wait(.1)
             wait_max = 1
             waiting = 0
-            repeat wait(0.01) 
+            repeat wait() 
                 game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cframe * CFrame.new(0, 2, 0)
+                wait()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cframe * CFrame.new(0, 1, 0)
                 game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
                 waiting = waiting + 0.01
             until findChestByCframe(cframe) == false or waiting >= wait_max
