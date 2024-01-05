@@ -37,8 +37,8 @@ pcall(function()
         end
         
         if _G.StopWhenChalice then
-            spawn(function()
-                while wait() do
+            task.spawn(function()
+                while task.wait() do
                     for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
                         if string.find(v.Name, "halice") then
                             _G.Stop = true
@@ -155,6 +155,23 @@ pcall(function()
             wait(1)
         end
 
+        -- OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
+        --     if (getgenv().ED_AntiKick.CheckCaller and not checkcaller() or true) and stringlower(getnamecallmethod()) == "kick" and ED_AntiKick.Enabled then
+        --         if getgenv().ED_AntiKick.SendNotifications then
+        --             StarterGui:SetCore("SendNotification", {
+        --                 Title = "Exunys Developer",
+        --                 Text = "The script has successfully intercepted an attempted kick.",
+        --                 Icon = "rbxassetid://6238540373",
+        --                 Duration = 2,
+        --             })
+        --         end
+        
+        --         return nil
+        --     end
+        
+        --     return OldNamecall(...)
+        -- end))
+
         local function loopHopServer()
             while wait() do wait(2) HopServer() end
         end
@@ -181,30 +198,42 @@ pcall(function()
             end
             return obj
         end
+        
+        local veryImportantWaitTime = 0.5
+        task.spawn(function()
+            while task.wait(veryImportantWaitTime) do
+                pcall(function()
+                    for i,v in pairs(game.CoreGui:GetDescendants()) do
+                        pcall(function()
+                            if string.find(v.Name,"ErrorMessage") then
+                                if string.find(v.Text,"Security kick") then
+                                    veryImportantWaitTime = 1e9
+                                    Teleport()
+                                end
+                            end
+                        end)
+                    end
+                end)
+            end
+        end)
 
-        function Bypass(Chest)
-            Chest.CanCollide = false
-            if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
-                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
-            end
-            if game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored == true then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-            end
-            status, err = pcall(function() Chest.Script.RunContext = "Client" end)
-            cframe = Chest.CFrame
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chest.CFrame * CFrame.new(0, 5, 0)
-            wait(.1)
-            wait_max = 1
-            waiting = 0
-            repeat wait() 
-                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cframe * CFrame.new(0, 2, 0)
-                wait()
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cframe * CFrame.new(0, 1, 0)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-                waiting = waiting + 0.01
-            until findChestByCframe(cframe) == false or waiting >= wait_max
-        end
+        -- function Bypass(Chest)
+            
+        --     Chest.CanCollide = false
+        --     if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+        --         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
+        --     end
+
+        --     -- status, err = pcall(function() Chest.Script.RunContext = "Client" end)
+        --     cframe = Chest.CFrame
+        --     game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+        --     repeat wait()
+        --         game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot() * CFrame.new(0, 2, 0))
+        --         wait(.2)
+        --         firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
+        --     until findChestByCframe(cframe) == false
+        --     game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+        -- end
     
         local function toTarget(...)
             local RealtargetPos = {...}
@@ -312,41 +341,38 @@ pcall(function()
         _G.MaxCounter = 5
         _G.WaitTimeWhenCount = 1
         if _G.BypassTP then
-            spawn(function()
+            task.spawn(function() 
                 while wait() do
                     if _G.Stop then return end
-                    status, err = pcall(function()
-                        wait(_G.DelayTP)
-                        if _G.StopEnabled then
-                            if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
-                        end
-        
-                        if _G.ChestFarmEnabled then
-                            chests = findAllChest()
-                            print(chests)
-                            if tableempty(chests) then
-                                if _G.HopWhenNoChest then
-                                    if _G.CounterBeforeHop < _G.MaxCounter then
-                                        wait(_G.WaitTimeWhenCount)
-                                        _G.CounterBeforeHop = _G.CounterBeforeHop + 1
-                                    else
-                                        if _G.WebhookURL then 
-                                            if not _G.WebSended then _G.WebSended = true end
-                                        end
-                                        loopHopServer()
-                                        return
-                                    end
-                                end
+                    task.wait(6)
+                    if _G.Stop then return end
+                    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                    task.wait(1)
+                    repeat task.wait() until game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health > 0
+                end
+            end)
+            task.spawn(function()
+                while true do
+                    local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
+                    if not game.Players.LocalPlayer.Character or game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then
+            
+                    else
+                        local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
+                        if hasCrewTag then hasCrewTag:Destroy() end
+                        local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+                        if hasHumanoid then
+                            local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2") or game.Workspace:FindFirstChild("Chest1") or game.Workspace:FindFirstChild("Chest")
+                            
+                            if Chest then
+                                game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
+                                firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
                             else
-                                for i,v in pairs(chests) do
-                                    wait(_G.DelayTP)
-                                    if _G.Stop then return end
-                                    Bypass(v)
-                                end
+                                HopServer()
+                                break
                             end
-                        end
-                    end)
-                    if err then print(err) end
+                        end 
+                    end
+                    task.wait()
                 end
             end)
         else
@@ -451,6 +477,24 @@ pcall(function()
             repeat wait() until _G.WebSended == true
             send_webhook("Hopping Server | Disconnected")
             return
+        end)
+        
+        local veryImportantWaitTime = 0.5
+        task.spawn(function()
+            while task.wait(veryImportantWaitTime) do
+                pcall(function()
+                    for i,v in pairs(game.CoreGui:GetDescendants()) do
+                        pcall(function()
+                            if string.find(v.Name,"ErrorMessage") then
+                                if string.find(v.Text,"Security kick") then
+                                    veryImportantWaitTime = 1e9
+                                    HopServer()
+                                end
+                            end
+                        end)
+                    end
+                end)
+            end
         end)
 
         spawn(function()
