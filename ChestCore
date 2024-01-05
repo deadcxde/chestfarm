@@ -337,6 +337,7 @@ pcall(function()
                                 end
                             else
                                 for i,v in pairs(chests) do
+                                    wait(_G.DelayTP)
                                     if _G.Stop then return end
                                     Bypass(v)
                                 end
