@@ -198,24 +198,6 @@ pcall(function()
             end
             return obj
         end
-        
-        local veryImportantWaitTime = 0.5
-        task.spawn(function()
-            while task.wait(veryImportantWaitTime) do
-                pcall(function()
-                    for i,v in pairs(game.CoreGui:GetDescendants()) do
-                        pcall(function()
-                            if string.find(v.Name,"ErrorMessage") then
-                                if string.find(v.Text,"Security kick") then
-                                    veryImportantWaitTime = 1e9
-                                    Teleport()
-                                end
-                            end
-                        end)
-                    end
-                end)
-            end
-        end)
 
         -- function Bypass(Chest)
             
@@ -354,11 +336,13 @@ pcall(function()
             task.spawn(function()
                 while true do
                     if _G.Stop == true then return end
+                    if _G.StopEnabled == true and _G.StopWhenBeli > 0 and _G.StopWhenBeli > game.Players.LocalPlayer.Data.Beli.Value then return end
                     local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                     if not game.Players.LocalPlayer.Character or game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then
             
                     else
                         if _G.Stop == true then return end
+                        if _G.StopEnabled == true and _G.StopWhenBeli > 0 and _G.StopWhenBeli > game.Players.LocalPlayer.Data.Beli.Value then return end
                         local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
                         if hasCrewTag then hasCrewTag:Destroy() end
                         local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
