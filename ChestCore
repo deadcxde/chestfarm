@@ -12,6 +12,10 @@ pcall(function()
         _G.Stop = false
         _G.StopWhenChalice = false
     end
+    if _G.StopWhenDarkness == nil then
+        _G.Stop = false
+        _G.StopWhenDarkness = false
+    end
     if BF == true then
         repeat wait() until game:IsLoaded()
         function Notification(text)
@@ -41,6 +45,17 @@ pcall(function()
                 while task.wait() do
                     for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
                         if string.find(v.Name, "halice") then
+                            _G.Stop = true
+                        end
+                    end
+                end
+            end)
+        end
+        if _G.StopWhenDarkness then
+            task.spawn(function()
+                while task.wait() do
+                    for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
+                        if string.find(v.Name, "arkness") then
                             _G.Stop = true
                         end
                     end
