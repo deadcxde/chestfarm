@@ -369,7 +369,7 @@ pcall(function()
                                 if chestBefore ~= Chest then task.wait(_G.DelayBetweenChest or 0.1) end
                                 chestBefore = Chest
                                 game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
-                                firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
+                                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
                             else
                                 task.wait(_G.DelayTP or 1)
                                 HopServer()
