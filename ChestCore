@@ -67,6 +67,7 @@ pcall(function()
         local Time = os.date('!*t', OSTime)
         local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
         local function send_webhook(sended_from)
+            if not _G.WebhookTimer or not _G.WebhookURL then return end
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
             local workTime = os.date('!*t', nOSTime - OSTime)
@@ -452,9 +453,12 @@ pcall(function()
                             for i, Chest in pairs(chests) do
                                 game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
                                 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
+                                wait()
                             end
-                            HopServer()
-                            break
+                            if not game.Workspace:FindFirstChild("Chest1") or not game.Workspace:FindFirstChild("Chest2") or not game.Workspace:FindFirstChild("Chest3") or not game.Workspace:FindFirstChild("Chest4") then
+                                HopServer()
+                                break
+                            end
                         end 
                     end
                     task.wait()
