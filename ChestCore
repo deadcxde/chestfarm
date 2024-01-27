@@ -432,7 +432,7 @@ pcall(function()
                             for i, chest in pairs(game.Workspace:GetChildren()) do
                                 if chest.Name == "Chest3" or chest.Name == "Chest2" or chest.Name == "Chest1" or chest.Name == "Chest4" then
                                     if _G.Stop == true then return end
-                                    chest.Script.RunContext = "Client"
+                                    status, err = pcall(function() chest.Script.RunContext = "Client" end)
                                     game.Players.LocalPlayer.Character:PivotTo(chest:GetPivot())
                                     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
                                     task.wait()
