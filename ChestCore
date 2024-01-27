@@ -372,6 +372,7 @@ pcall(function()
                                     chestBefore = Chest
                                     game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
                                     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
+                                    firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
                                 else
                                     task.wait(_G.DelayTP or 1)
                                     HopServer()
@@ -453,6 +454,7 @@ pcall(function()
                             for i, Chest in pairs(chests) do
                                 game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
                                 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
+                                firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
                                 wait()
                             end
                             if not game.Workspace:FindFirstChild("Chest1") or not game.Workspace:FindFirstChild("Chest2") or not game.Workspace:FindFirstChild("Chest3") or not game.Workspace:FindFirstChild("Chest4") then
