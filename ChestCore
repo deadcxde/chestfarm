@@ -337,7 +337,87 @@ pcall(function()
         _G.CounterBeforeHop = 0
         _G.MaxCounter = 5
         _G.WaitTimeWhenCount = 1
-        if _G.BypassTP then
+        if not _G.IDONTCAREABOUTBAN or _G.IDONTCAREABOUTBAN == false then
+            if _G.BypassTP then
+                task.spawn(function() 
+                    while wait() do
+                        if _G.Stop then return end
+                        task.wait(6)
+                        if _G.Stop then return end
+                        game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                        task.wait(1)
+                        repeat task.wait() until game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health > 0
+                    end
+                end)
+                task.spawn(function()
+                    local chestBefore = nil
+                    while true do
+                        if _G.Stop == true then return end
+                        if _G.StopEnabled == true and _G.StopWhenBeli > 0 and game.Players.LocalPlayer.Data.Beli.Value > _G.StopWhenBeli then return end
+                        local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
+                        if not game.Players.LocalPlayer.Character or game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then
+                
+                        else
+                            if _G.Stop == true then return end
+                            if _G.StopEnabled == true and _G.StopWhenBeli > 0 and game.Players.LocalPlayer.Data.Beli.Value > _G.StopWhenBeli then return end
+                            local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
+                            if hasCrewTag then hasCrewTag:Destroy() end
+                            local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+                            if hasHumanoid then
+                                local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2") or game.Workspace:FindFirstChild("Chest1") or game.Workspace:FindFirstChild("Chest")
+                                
+                                if Chest then
+                                    if chestBefore ~= Chest then task.wait(_G.DelayBetweenChest or 0.1) end
+                                    chestBefore = Chest
+                                    game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
+                                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
+                                else
+                                    task.wait(_G.DelayTP or 1)
+                                    HopServer()
+                                    break
+                                end
+                            end 
+                        end
+                        task.wait()
+                    end
+                end)
+            else
+                spawn(function()
+                    while wait() do
+                        if _G.StopEnabled then
+                            if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
+                        end
+                        wait(0.5)
+                        if _G.ChestFarmEnabled then
+                            cframe = findNearestChest()
+                            if cframe then
+                                toTarget(cframe.CFrame)
+                                game:service('VirtualInputManager'):SendKeyEvent(true, "Q", false, game)
+                                game:service('VirtualInputManager'):SendKeyEvent(false, "Q", false, game)
+                                wait(.1)
+                            else
+                                if _G.HopWhenNoChest then
+                                    if _G.WebhookURL then 
+                                        if not _G.WebSended then _G.WebSended = true end
+                                    end
+                                    HopServer()
+                                    return
+                                end
+                            end
+                        end
+                    end
+                end)
+                spawn(function()
+                    while wait() do
+                        wait(2)
+                        if _G.ChestFarmEnabled then
+                            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+                        end
+                    end
+                end)
+            
+            end
+        else
             task.spawn(function() 
                 while wait() do
                     if _G.Stop then return end
@@ -363,61 +443,24 @@ pcall(function()
                         if hasCrewTag then hasCrewTag:Destroy() end
                         local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
                         if hasHumanoid then
-                            local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2") or game.Workspace:FindFirstChild("Chest1") or game.Workspace:FindFirstChild("Chest")
-                            
-                            if Chest then
-                                if chestBefore ~= Chest then task.wait(_G.DelayBetweenChest or 0.1) end
-                                chestBefore = Chest
+                            chests = {}
+                            for i, chest in pairs(game.Workspace:GetChildren()) do
+                                if chest.Name == "Chest3" or chest.Name == "Chest2" or chest.Name == "Chest1" or chest.Name == "Chest4" then
+                                    table.insert(chests, chest)
+                                end
+                            end
+                            for i, Chest in pairs(chests) do
                                 game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
                                 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
-                            else
-                                task.wait(_G.DelayTP or 1)
-                                HopServer()
-                                break
                             end
+                            HopServer()
+                            break
                         end 
                     end
                     task.wait()
                 end
             end)
-        else
-            spawn(function()
-                while wait() do
-                    if _G.StopEnabled then
-                        if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
-                    end
-                    wait(0.5)
-                    if _G.ChestFarmEnabled then
-                        cframe = findNearestChest()
-                        if cframe then
-                            toTarget(cframe.CFrame)
-                            game:service('VirtualInputManager'):SendKeyEvent(true, "Q", false, game)
-                            game:service('VirtualInputManager'):SendKeyEvent(false, "Q", false, game)
-                            wait(.1)
-                        else
-                            if _G.HopWhenNoChest then
-                                if _G.WebhookURL then 
-                                    if not _G.WebSended then _G.WebSended = true end
-                                end
-                                HopServer()
-                                return
-                            end
-                        end
-                    end
-                end
-            end)
-            spawn(function()
-                while wait() do
-                    wait(2)
-                    if _G.ChestFarmEnabled then
-                        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-                    end
-                end
-            end)
-        
         end
-
-        
         spawn(function()
             wait(1800)
             if _G.ChestFarmEnabled then
