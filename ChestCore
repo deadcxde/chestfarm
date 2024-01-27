@@ -452,6 +452,7 @@ pcall(function()
                                 end
                             end
                             for i, Chest in pairs(chests) do
+                                if _G.Stop == true then return end
                                 game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
                                 wait()
                                 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
