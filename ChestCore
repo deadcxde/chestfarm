@@ -68,15 +68,24 @@ pcall(function()
         local OSTime = os.time()
         local Time = os.date('!*t', OSTime)
         local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
+        local function getPlayerCount()
+            count = 0
+            for i,v in pairs(game.Players:GetChildren()) do
+                count = count + 1
+            end
+            return count
+        end
+
         local function chalice_send_webhook(sended_from)
             _G.WebhookURL = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
+             
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
             local workTime = os.date('!*t', nOSTime - OSTime)
             local plr = game.Players.LocalPlayer
             local Embed = {
                 ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-                ["description"] = "Чаша выпала!!!!!!!!!!!!!!!!!!!!!!\n**Job ID**\n```lua\n" .. game.JobId .. "```",
+                ["description"] = "Чаша выпала!!!!!!!!!!!!!!!!!!!!!!\n**Job ID**\n```lua\n" .. game.JobId .. "```\n```diff\n+ Players: " .. tostring(getPlayerCount()) .. "/12```",
                 ["type"] = "rich",
                 ["color"] = tonumber(0xffff00),
                 ["footer"] = {
