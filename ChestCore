@@ -39,7 +39,14 @@ pcall(function()
             end
             return true
         end
-        
+        local function getPlayerCount()
+            count = 0
+            for i,v in pairs(game.Players:GetChildren()) do
+                count = count + 1
+            end
+            return count
+        end
+
         local function chalice_send_webhook(sended_from)
             _G.WebhookURL = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
             local nOSTime = os.time()
@@ -94,13 +101,7 @@ pcall(function()
         local OSTime = os.time()
         local Time = os.date('!*t', OSTime)
         local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
-        local function getPlayerCount()
-            count = 0
-            for i,v in pairs(game.Players:GetChildren()) do
-                count = count + 1
-            end
-            return count
-        end
+        
 
         
         local function send_webhook(sended_from)
