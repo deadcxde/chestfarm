@@ -133,61 +133,78 @@ pcall(function()
             };
         end
     
-        function HopServer(bO)
-            if not bO then
-                bO = 10
+        local function HopServer()
+            local PlaceID = game.PlaceId
+            local AllIDs = {}
+            local foundAnything = ""
+            local actualHour = os.date("!*t").hour
+            local Deleted = false
+            local File = pcall(function()
+            AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServersChestFarmHehe.json"))
+            end)
+            if not File then
+            table.insert(AllIDs, actualHour)
+            writefile("NotSameServersChestFarmHehe.json", game:GetService('HttpService'):JSONEncode(AllIDs))
             end
-            ticklon = tick()
-            repeat
-                task.wait()
-            until tick() - ticklon >= 1
-            local function Hop()
-                for r = 1, math.huge do
-                    if ChooseRegion == nil or ChooseRegion == "" then
-                        ChooseRegion = "Germany"
-                    else
-                        game:GetService("Players").LocalPlayer.PlayerGui.ServerBrowser.Frame.Filters.SearchRegion.TextBox.Text =
-                            ChooseRegion
-                    end
-                    local bP = game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer(r)
-                    for k, v in pairs(bP) do
-                        if k ~= game.JobId and v["Count"] < bO then
-                           game:GetService("ReplicatedStorage").__ServerBrowser:InvokeServer("teleport", k)
-                        end
-                    end
+            function TPReturner()
+                local Site;
+                if foundAnything == "" then
+                    Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+                else
+                    Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
                 end
-                return false
-            end
-            if not getgenv().Loaded then
-                local function bQ(v)
-                    if v.Name == "ErrorPrompt" then
-                        if v.Visible then
-                            if v.TitleFrame.ErrorTitle.Text == "Teleport Failed" then
-                                HopServer()
-                                v.Visible = false
-                            end
-                        end
-                        v:GetPropertyChangedSignal("Visible"):Connect(
-                            function()
-                                if v.Visible then
-                                    if v.TitleFrame.ErrorTitle.Text == "Teleport Failed" then
-                                        HopServer()
-                                        v.Visible = false
-                                    end
+                local ID = ""
+                if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+                    foundAnything = Site.nextPageCursor
+                end
+                local num = 0;
+                for i,v in pairs(Site.data) do
+                    local Possible = true
+                    ID = tostring(v.id)
+                    if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                        for _,Existing in pairs(AllIDs) do
+                            if num ~= 0 then
+                                if ID == tostring(Existing) then
+                                    Possible = false
+                                end
+                            else
+                                if tonumber(actualHour) ~= tonumber(Existing) then
+                                    local delFile = pcall(function()
+                                        -- delfile("NotSameServers.json")
+                                        AllIDs = {}
+                                        table.insert(AllIDs, actualHour)
+                                    end)
                                 end
                             end
-                        )
+                            num = num + 1
+                        end
+                        if Possible == true then
+                            table.insert(AllIDs, ID)
+                            wait()
+                            pcall(function()
+                                -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                                wait()
+                                game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                            end)
+                            wait(4)
+                        end
                     end
                 end
-                for k, v in pairs(game.CoreGui.RobloxPromptGui.promptOverlay:GetChildren()) do
-                    bQ(v)
+            end
+        
+            function Teleport()
+                while wait() do
+                    pcall(function()
+                        TPReturner()
+                        if foundAnything ~= "" then
+                            TPReturner()
+                        end
+                    end)
                 end
-                game.CoreGui.RobloxPromptGui.promptOverlay.ChildAdded:Connect(bQ)
-                getgenv().Loaded = true
             end
-            while not Hop() do
-                wait()
-            end
+        
+            Teleport()
+            wait(1)
         end
 
         -- OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
@@ -357,6 +374,7 @@ pcall(function()
         _G.CounterBeforeHop = 0
         _G.MaxCounter = 5
         _G.WaitTimeWhenCount = 1
+        _G.NoChest = true
         if not _G.IDONTCAREABOUTBAN or _G.IDONTCAREABOUTBAN == false then
             if _G.BypassTP then
                 task.spawn(function() 
@@ -387,12 +405,18 @@ pcall(function()
                                 local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2") or game.Workspace:FindFirstChild("Chest1") or game.Workspace:FindFirstChild("Chest")
                                 
                                 if Chest then
+                                    if _G.NoChest then _G.NoChest = false end
                                     if chestBefore ~= Chest then task.wait(_G.DelayBetweenChest or 0.1) end
                                     chestBefore = Chest
                                     game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
                                     firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
                                     firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
                                 else
+                                    if _G.NoChest then
+                                        local delFile = pcall(function()
+                                            delfile("NotSameServersChestFarmHehe.json")
+                                        end)
+                                    end
                                     task.wait(_G.DelayTP or 1)
                                     HopServer()
                                     break
