@@ -51,7 +51,7 @@ pcall(function()
         end
 
         local function chalice_send_webhook()
-            _G.WebhookURL = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
+            _G.WebhookURLITEM = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
             local workTime = os.date('!*t', nOSTime - OSTime)
@@ -67,7 +67,7 @@ pcall(function()
                 ["timestamp"] = string.format('%d-%d-%dT%02d:%02d:%02dZ', Time.year, Time.month, Time.day, Time.hour, Time.min, Time.sec),
             };
             http.request {
-                Url = _G.WebhookURL;
+                Url = _G.WebhookURLITEM;
                 Method = 'POST';
                 Headers = {
                     ['Content-Type'] = 'application/json';
@@ -76,7 +76,7 @@ pcall(function()
             };
         end
         local function fist_send_webhook()
-            _G.WebhookURL = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
+            _G.WebhookURLITEM = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
             local workTime = os.date('!*t', nOSTime - OSTime)
@@ -92,7 +92,7 @@ pcall(function()
                 ["timestamp"] = string.format('%d-%d-%dT%02d:%02d:%02dZ', Time.year, Time.month, Time.day, Time.hour, Time.min, Time.sec),
             };
             http.request {
-                Url = _G.WebhookURL;
+                Url = _G.WebhookURLITEM;
                 Method = 'POST';
                 Headers = {
                     ['Content-Type'] = 'application/json';
