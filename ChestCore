@@ -47,7 +47,7 @@ pcall(function()
             return count
         end
 
-        local function chalice_send_webhook(sended_from)
+        local function chalice_send_webhook()
             _G.WebhookURL = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
             local nOSTime = os.time()
             local nTime = os.date('!*t', nOSTime)
@@ -72,6 +72,31 @@ pcall(function()
                 Body = game:GetService'HttpService':JSONEncode({content = "@here Выпала чаша", embeds = {Embed};});
             };
         end
+        local function fist_send_webhook()
+            _G.WebhookURL = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
+            local nOSTime = os.time()
+            local nTime = os.date('!*t', nOSTime)
+            local workTime = os.date('!*t', nOSTime - OSTime)
+            local plr = game.Players.LocalPlayer
+            local Embed = {
+                ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
+                ["description"] = "Фист оф даркнесс выпал выпал\n**Job ID**\n```lua\n" .. game.JobId .. "```\n```diff\n+ Players: " .. tostring(getPlayerCount()) .. "/12```",
+                ["type"] = "rich",
+                ["color"] = tonumber(0xffff00),
+                ["footer"] = {
+                    ["text"] = "chest farm bot",
+                },
+                ["timestamp"] = string.format('%d-%d-%dT%02d:%02d:%02dZ', Time.year, Time.month, Time.day, Time.hour, Time.min, Time.sec),
+            };
+            http.request {
+                Url = _G.WebhookURL;
+                Method = 'POST';
+                Headers = {
+                    ['Content-Type'] = 'application/json';
+                };
+                Body = game:GetService'HttpService':JSONEncode({content = "@here Выпала фист оф даркнесс", embeds = {Embed};});
+            };
+        end
 
         if _G.StopWhenChalice then
             task.spawn(function()
@@ -92,6 +117,8 @@ pcall(function()
                     for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
                         if string.find(v.Name, "arkness") then
                             _G.Stop = true
+                            fist_send_webhook()
+                            return
                         end
                     end
                 end
