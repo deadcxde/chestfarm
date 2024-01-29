@@ -18,6 +18,9 @@ pcall(function()
     end
     if BF == true then
         repeat wait() until game:IsLoaded()
+        local OSTime = os.time()
+        local Time = os.date('!*t', OSTime)
+        local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
         function Notification(text)
             local StarterGui = game:GetService("StarterGui")
             StarterGui:SetCore("SendNotification", {
@@ -124,12 +127,6 @@ pcall(function()
                 end
             end)
         end
-
-        local OSTime = os.time()
-        local Time = os.date('!*t', OSTime)
-        local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
-        
-
         
         local function send_webhook(sended_from)
             if not _G.WebhookTimer or not _G.WebhookURL then return end
