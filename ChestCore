@@ -497,16 +497,8 @@ pcall(function()
             task.spawn(function() 
                 while wait() do
                     if _G.Stop then return end
-                    task.wait(6)
-                    if _G.Stop then return end
                     team = game.Players.LocalPlayer.Team
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Pirates")
-                    task.wait(.1)
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
-                    task.wait(.1)
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam",team)
-                    task.wait(1)
-                    repeat task.wait() until game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health > 0
                 end
             end)
             task.spawn(function()
