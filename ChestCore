@@ -408,7 +408,7 @@ pcall(function()
                     while wait() do
                         if _G.Stop then return end
                         team = game.Players.LocalPlayer.Team
-                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam",team)
+                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
                     end
                 end)
                 task.spawn(function()
@@ -491,8 +491,7 @@ pcall(function()
                 while wait() do
                     repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == false
                     if _G.Stop then return end
-                    team = game.Players.LocalPlayer.Team
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam",team)
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
                 end
             end)
             task.spawn(function()
