@@ -404,6 +404,7 @@ pcall(function()
         if not _G.IDONTCAREABOUTBAN or _G.IDONTCAREABOUTBAN == false then
             if _G.BypassTP then
                 task.spawn(function() 
+                    repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == false
                     while wait() do
                         if _G.Stop then return end
                         team = game.Players.LocalPlayer.Team
@@ -488,6 +489,7 @@ pcall(function()
         else
             task.spawn(function() 
                 while wait() do
+                    repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == false
                     if _G.Stop then return end
                     team = game.Players.LocalPlayer.Team
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam",team)
