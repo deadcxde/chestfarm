@@ -494,7 +494,7 @@ pcall(function()
                     if _G.Stop then return end
                     task.wait(6)
                     if _G.Stop then return end
-                    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam",game.Players.LocalPlayer.Team) 
                     task.wait(1)
                     repeat task.wait() until game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health > 0
                 end
