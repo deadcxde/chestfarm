@@ -546,14 +546,6 @@ pcall(function()
                 end
             end)
         end
-        spawn(function()
-            wait(1800)
-            if _G.ChestFarmEnabled then
-                if _G.BypassAntiCheat then
-                    HopServer()
-                end
-            end
-        end)
         
         spawn(function()
             while wait() do 
